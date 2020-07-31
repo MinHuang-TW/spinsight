@@ -2,6 +2,7 @@
 
 * {
   font-family: 'Poppins', sans-serif;
+  letter-spacing: 1px;
 }
 
 body {
@@ -24,8 +25,10 @@ body {
 button {
   cursor: pointer;
   border: none;
+  letter-spacing: 1.5px;
 }
 input:focus,
+textarea:focus,
 button:focus {
   outline: none;
   box-shadow: none;
@@ -45,4 +48,19 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
   box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+
+a {
+  text-decoration: none;
+}
+
+textarea::placeholder,
+input::placeholder,
+textarea::-webkit-input-placeholder,
+input::-webkit-input-placeholder {
+  opacity: 0.3;
+}
+textarea:-ms-input-placeholder,
+input:-ms-input-placeholder {
+  opacity: 0.3;
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export default styled.div`
   position: absolute;
   width: 90%;
+  max-width: 360px;
   background: white;
   padding: ${(props) => props.padding};
   border-radius: ${(props) => (props.long ? '0.5rem 0.5rem 0 0' : '0.5rem')};

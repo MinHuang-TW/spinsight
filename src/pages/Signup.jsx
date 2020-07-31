@@ -5,14 +5,12 @@ import Input from '../elements/Input';
 import Modal from '../elements/Modal';
 import Button from '../elements/Button';
 import AddIcon from '../images/addIcon.png';
+import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
 
 const Signup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const url =
-    'https://firebasestorage.googleapis.com/v0/b/spinsight-api.appspot.com/o';
-  const avatars = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
@@ -23,8 +21,8 @@ const Signup = () => {
   }, []);
 
   const handleAvatar = useCallback(
-    (string) => () => {
-      setAvatar(string);
+    (avatar) => () => {
+      setAvatar(avatar);
     },
     []
   );
@@ -32,16 +30,10 @@ const Signup = () => {
   return (
     <Layout>
       <Container guttertop front>
-        <AddButton
-          avatar={avatar}
-          onClick={handleOpen}
-          style={{
-            boxShadow: avatar ? '0px 0px 5px rgba(0, 0, 0, 0.6)' : null,
-          }}
-        >
+        <AddButton avatar={avatar} onClick={handleOpen}>
           <img
             width={avatar ? '100%' : 32}
-            src={avatar ? `${url}/${avatar}.png?alt=media` : AddIcon}
+            src={avatar ? avatar : AddIcon}
             alt='add icon'
           />
         </AddButton>
@@ -51,25 +43,25 @@ const Signup = () => {
       {isOpen && (
         <Modal top='8.5rem' long>
           <Grid>
-            {avatars.map((avatar) => (
-              <img
-                key={`W${avatar}`}
-                width='100%'
-                src={`${url}/W${avatar}.png?alt=media`}
-                alt={`Woman ${avatar}`}
-                onClick={handleAvatar(`W${avatar}`)}
+            {WomenAvatars.map((photo) => (
+              <Photo
+                key={photo}
+                src={photo}
+                alt='woman avatar'
+                selected={photo === avatar}
+                onClick={handleAvatar(photo)}
               />
             ))}
           </Grid>
           <Divider />
           <Grid>
-            {avatars.map((avatar) => (
-              <img
-                key={`W${avatar}`}
-                width='100%'
-                src={`${url}/M${avatar}.png?alt=media`}
-                alt={`Man ${avatar}`}
-                onClick={handleAvatar(`M${avatar}`)}
+            {MenAvatars.map((photo) => (
+              <Photo
+                key={photo}
+                src={photo}
+                alt='man avatar'
+                selected={photo === avatar}
+                onClick={handleAvatar(photo)}
               />
             ))}
           </Grid>
@@ -111,7 +103,6 @@ const Container = styled.div`
   align-items: center;
   margin-top: ${(props) => (props.guttertop ? '5rem' : 0)};
   margin-bottom: ${(props) => (props.gutterBottom ? '5rem' : 0)};
-  width: ${(props) => props.width};
   z-index: ${(props) => props.front && 10};
   a {
     width: 100%;
@@ -121,7 +112,7 @@ const Container = styled.div`
 const AddButton = styled.button`
   width: 6rem;
   height: 6rem;
-  border-radius: 6rem;
+  border-radius: 50%;
   background: white;
   padding: 0px;
   border: 0.2rem solid ${(props) => props.theme.primary};
@@ -149,9 +140,15 @@ const Grid = styled.div`
   &:first-of-type {
     margin-top: 7rem;
   }
-  img {
-    cursor: pointer;
-  }
+`;
+
+const Photo = styled.img`
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: ${(props) =>
+    props.selected && `0 0 8px 3px ${props.theme.primary}`};
 `;
 
 const Divider = styled.hr`
