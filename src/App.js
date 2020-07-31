@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Signup, Login, Home, Profile, AddQuestion } from './pages';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './util/theme';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className='App'>
+        <Router>
+          <Switch>
+            <Route path='/' component={Home} exact />
+            <Route path='/signup' component={Signup} />
+            <Route path='/login' component={Login} />
+            <Route path='/profile' component={Profile} />
+            <Route path='/addQuestion' component={AddQuestion} />
+          </Switch>
+        </Router>
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
