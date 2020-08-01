@@ -5,7 +5,8 @@ export default styled.button`
   background: ${(props) => props.theme.primary};
   width: ${(props) => props.fullWidth && '100%'};
   color: #fff;
-  font-size: 18px;
+  font-size: 1rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
   box-shadow: none;
   border-radius: 5rem;

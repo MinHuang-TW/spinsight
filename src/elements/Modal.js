@@ -1,4 +1,14 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const popup = keyframes`
+  0% {
+    transform : translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform :
+      translate(-50%, -50%) scale(1);
+  }
+`;
 
 export default styled.div`
   position: absolute;
@@ -15,13 +25,15 @@ export default styled.div`
   justify-content: center;
   align-items: center;
   top: ${(props) => props.top};
+  animation: 0.2s ${popup} ease-in-out;
   z-index: 5;
 
   ${(props) =>
     props.long &&
     css`
       bottom: 0px;
-      border-radius: '0.5rem 0.5rem 0 0';
+      border-radius: 0.5rem 0.5rem 0 0;
       transform: translate(-50%, 0%);
+      animation: none;
     `}
 `;

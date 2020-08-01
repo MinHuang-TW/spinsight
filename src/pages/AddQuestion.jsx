@@ -27,7 +27,9 @@ const AddQuestion = () => {
           </h2>
         </Popup>
       )}
+
       <h1>Hello, Jane !</h1>
+
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>
         <Main>
@@ -38,9 +40,7 @@ const AddQuestion = () => {
             Delete the question after 1 day
           </Checkbox>
         </Main>
-        <Button style={{ margin: 0 }} disabled>
-          submit
-        </Button>
+        <Button disabled>submit</Button>
       </Container>
 
       <Navbar />
@@ -57,6 +57,9 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  ${Button} {
+    margin: 0px;
+  }
 `;
 
 const Main = styled.div`

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
 export default styled.button`
-  width: ${(props) => (props.size ? props.size : '4rem')};
-  height: ${(props) => (props.size ? props.size : '4rem')};
+  width: ${(props) => props.size || '4rem'};
+  height: ${(props) => props.size || '4rem'};
   border-radius: 50rem;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  background: ${(props) => (props.color ? props.color : '#fff')};
+  background: ${(props) => props.color || '#fff'};
   color: ${(props) => props.theme.secondary};
   font-size: 1rem;
   padding: 0px;
@@ -13,6 +12,8 @@ export default styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
+
   &::after {
     content: '';
     width: 90%;

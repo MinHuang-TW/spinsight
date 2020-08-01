@@ -26,7 +26,6 @@ body {
 button {
   cursor: pointer;
   border: none;
-  letter-spacing: 1.5px;
 }
 input:focus,
 textarea:focus,
