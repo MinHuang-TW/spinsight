@@ -12,7 +12,7 @@ import {
 } from '../images/category';
 import styled from 'styled-components';
 
-const Popup = ({ category, children, handleCancel }) => {
+const Popup = ({ category, children, handleCancel, open }) => {
   const fetchIcon = (category) => {
     switch (category) {
       case 'appearance':
@@ -38,27 +38,38 @@ const Popup = ({ category, children, handleCancel }) => {
   };
 
   return (
-    <Container onClick={handleCancel}>
-      <Modal top='50%'>
+    <Container open={open} onClick={handleCancel}>
+      <PopupModal open={open}>
         <Icon>
           <img src={fetchIcon(category)} alt='icon' />
         </Icon>
         {children}
-      </Modal>
+      </PopupModal>
     </Container>
   );
 };
 
 export default Popup;
 
+const PopupModal = styled(Modal)`
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform: ${(props) =>
+    props.open
+      ? 'translate(-50%, -50%) scale(1)'
+      : 'translate(-50%, -50%) scale(0)'};
+  transition: transform 0.2s ease-in-out;
+`;
+
 const Container = styled.section`
+  position: absolute;
   width: 100%;
   height: calc(100vh - 0.5rem);
   background: rgba(240, 241, 241, 0.8);
   --webkit-backdrop-filter: blur(1.5px);
   backdrop-filter: blur(1.5px);
-  position: absolute;
-  z-index: 999;
+  transition: ${(props) => props.open || 'z-index 0.2s ease-in-out'};
+  z-index: ${(props) => (props.open ? 999 : -999)};
 `;
 
 const Icon = styled.div`

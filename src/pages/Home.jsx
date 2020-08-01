@@ -57,15 +57,13 @@ const Home = () => {
     <Layout>
       <h1>Hello, Jane !</h1>
 
-      {showPopup && (
-        <Popup category={category} handleCancel={handleCancel}>
-          <PopupContainer>
-            <h2>Who has blue eyes?</h2>
-            <Input placeholder='Answer' />
-            <Button>Submit</Button>
-          </PopupContainer>
-        </Popup>
-      )}
+      <Popup category={category} open={showPopup} handleCancel={handleCancel}>
+        <PopupContainer>
+          <h2>Who has blue eyes?</h2>
+          <Input placeholder='Answer' />
+          <Button>Submit</Button>
+        </PopupContainer>
+      </Popup>
 
       <WheelContainer>
         <RadioButton border onClick={handleSpin}>

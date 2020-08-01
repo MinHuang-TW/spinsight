@@ -23,33 +23,6 @@ body {
   flex-direction: column;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-}
-input:focus,
-textarea:focus,
-button:focus {
-  outline: none;
-  box-shadow: none;
-}
-button:disabled,
-button[disabled] {
-  opacity: 0.2;
-  cursor: default;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-  box-shadow: 0 0 0px 1000px #ffffff inset;
-}
-
 a {
   text-decoration: none;
 }
@@ -71,6 +44,11 @@ h2 {
   margin: 0;
 }
 
+button {
+  cursor: pointer;
+  border: none;
+}
+
 textarea::placeholder,
 input::placeholder,
 textarea::-webkit-input-placeholder,
@@ -80,4 +58,27 @@ input::-webkit-input-placeholder {
 textarea:-ms-input-placeholder,
 input:-ms-input-placeholder {
   opacity: 0.3;
+}
+
+input:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+button:disabled,
+button[disabled] {
+  opacity: 0.2;
+  cursor: default;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  box-shadow: 0 0 0px 1000px #ffffff inset;
 }

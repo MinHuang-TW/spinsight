@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export default styled.button`
   width: ${(props) => props.size || '4rem'};
   height: ${(props) => props.size || '4rem'};
-  border-radius: 50rem;
+  border-radius: 50%;
   background: ${(props) => props.color || '#fff'};
   color: ${(props) => props.theme.secondary};
   font-size: 1rem;

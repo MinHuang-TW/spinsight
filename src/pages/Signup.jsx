@@ -40,36 +40,34 @@ const Signup = () => {
         <Text>{avatar ? 'change' : 'choose'} your Avatar</Text>
       </Container>
 
-      {isOpen && (
-        <Modal top='8.5rem' long>
-          <Grid>
-            {WomenAvatars.map((photo) => (
-              <Photo
-                key={photo}
-                src={photo}
-                alt='woman avatar'
-                selected={photo === avatar}
-                onClick={handleAvatar(photo)}
-              />
-            ))}
-          </Grid>
-          <Divider />
-          <Grid>
-            {MenAvatars.map((photo) => (
-              <Photo
-                key={photo}
-                src={photo}
-                alt='man avatar'
-                selected={photo === avatar}
-                onClick={handleAvatar(photo)}
-              />
-            ))}
-          </Grid>
-          <Button disabled={!avatar} onClick={handleClose}>
-            Confirm
-          </Button>
-        </Modal>
-      )}
+      <AvatarModal open={isOpen}>
+        <Grid>
+          {WomenAvatars.map((photo) => (
+            <Photo
+              key={photo}
+              src={photo}
+              alt='woman avatar'
+              selected={photo === avatar}
+              onClick={handleAvatar(photo)}
+            />
+          ))}
+        </Grid>
+        <Divider />
+        <Grid>
+          {MenAvatars.map((photo) => (
+            <Photo
+              key={photo}
+              src={photo}
+              alt='man avatar'
+              selected={photo === avatar}
+              onClick={handleAvatar(photo)}
+            />
+          ))}
+        </Grid>
+        <Button disabled={!avatar} onClick={handleClose}>
+          Confirm
+        </Button>
+      </AvatarModal>
 
       <Container>
         <Input type='text' placeholder='Name' />
@@ -94,6 +92,15 @@ const Signup = () => {
 };
 
 export default Signup;
+
+const AvatarModal = styled(Modal)`
+  bottom: 0px;
+  padding-top: 0;
+  top: ${(props) => (props.open ? '8.5rem' : '150vh')};
+  border-radius: 0.5rem 0.5rem 0 0;
+  transform: translate(-50%, 0%);
+  transition: all 0.2s ease-in-out;
+`;
 
 const Container = styled.div`
   display: flex;
