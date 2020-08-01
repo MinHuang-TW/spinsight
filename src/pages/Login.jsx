@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Title from '../elements/Title';
 import Input from '../elements/Input';
 import Button from '../elements/Button';
 import styled from 'styled-components';
@@ -9,7 +8,7 @@ import styled from 'styled-components';
 const Login = () => {
   return (
     <Layout barHeight='6.5rem'>
-      <Title>Welcome back !</Title>
+      <h1>Welcome back !</h1>
 
       <Container>
         <Input type='text' placeholder='Name' />

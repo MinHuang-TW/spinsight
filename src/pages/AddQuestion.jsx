@@ -1,29 +1,41 @@
 import React, { useState, useCallback } from 'react';
 import Layout from '../components/Layout';
-import Title from '../elements/Title';
 import Navbar from '../components/Navbar';
+import Popup from '../components/Popup';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
 const AddQuestion = () => {
   const [checked, setChecked] = useState(false);
+  const [submited, setSubmited] = useState(false);
 
   const handleCheck = useCallback(() => {
     setChecked(!checked);
   }, [checked]);
 
+  const handleCancel = useCallback(({ target }) => {
+    if (target.tagName !== 'SECTION') return;
+    setSubmited(false);
+  }, []);
+
   return (
     <Layout>
-      <Title>Hello, Jane !</Title>
-
+      {submited && (
+        <Popup category='OK' handleCancel={handleCancel}>
+          <h2 style={{ margin: '32px auto 48px' }}>
+            You have submitted your question successfully.
+          </h2>
+        </Popup>
+      )}
+      <h1>Hello, Jane !</h1>
       <Container>
-        <Subtitle>What would you like to ask your colleagues ?</Subtitle>
+        <h2>What would you like to ask your colleagues ?</h2>
         <Main>
           <QuestionInput placeholder='Ask a Question...' />
           <Checkbox>
             <input type='checkbox' checked={checked} onChange={handleCheck} />
             <Checkmark />
-            Delete the question after 1 day.
+            Delete the question after 1 day
           </Checkbox>
         </Main>
         <Button style={{ margin: 0 }} disabled>
@@ -37,13 +49,6 @@ const AddQuestion = () => {
 };
 
 export default AddQuestion;
-
-const Subtitle = styled.h2`
-  color: ${(props) => props.theme.secondary};
-  font-size: 1.3rem;
-  font-weight: 200;
-  margin: 0;
-`;
 
 const Container = styled.section`
   width: 75%;
