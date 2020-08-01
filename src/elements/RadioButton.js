@@ -4,7 +4,7 @@ export default styled.button`
   width: ${(props) => props.size || '4rem'};
   height: ${(props) => props.size || '4rem'};
   border-radius: 50%;
-  background: ${(props) => props.color || '#fff'};
+  background: ${(props) => props.background || '#fff'};
   color: ${(props) => props.theme.secondary};
   font-size: 1rem;
   padding: 0px;

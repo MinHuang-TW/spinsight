@@ -20,15 +20,13 @@ const AddQuestion = () => {
 
   return (
     <Layout>
-      {submited && (
-        <Popup category='OK' handleCancel={handleCancel}>
-          <h2 style={{ margin: '32px auto 48px' }}>
-            You have submitted your question successfully.
-          </h2>
-        </Popup>
-      )}
+      <Popup category='OK' open={submited} handleCancel={handleCancel}>
+        <h2 style={{ margin: '32px auto 48px' }}>
+          You have submitted your question successfully.
+        </h2>
+      </Popup>
 
-      <h1>Hello, Jane !</h1>
+      <h1>${submited ? 'Good job' : 'Hello'}, Jane !</h1>
 
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>

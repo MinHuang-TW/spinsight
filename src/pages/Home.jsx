@@ -111,7 +111,8 @@ const Wheel = styled.img`
   ${(props) =>
     props.clicked &&
     css`
-      animation: 2s ${(props) => spin(props.rotation)} ease-in-out;
+      --webkit-animation: ${(props) => spin(props.rotation)} 2s ease-in-out;
+      animation: ${(props) => spin(props.rotation)} 2s ease-in-out;
     `}
 `;
 

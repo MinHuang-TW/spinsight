@@ -32,7 +32,7 @@ const Login = () => {
 export default Login;
 
 const Container = styled.div`
-  width: ${(props) => (props.width ? props.width : '60%')};
+  width: ${(props) => props.width || '60%'};
   display: flex;
   flex-direction: column;
   justify-content: center;

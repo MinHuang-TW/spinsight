@@ -58,7 +58,8 @@ const PopupModal = styled(Modal)`
     props.open
       ? 'translate(-50%, -50%) scale(1)'
       : 'translate(-50%, -50%) scale(0)'};
-  transition: transform 0.2s ease-in-out;
+  --webkit-transition: transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out;
 `;
 
 const Container = styled.section`
@@ -68,7 +69,8 @@ const Container = styled.section`
   background: rgba(240, 241, 241, 0.8);
   --webkit-backdrop-filter: blur(1.5px);
   backdrop-filter: blur(1.5px);
-  transition: ${(props) => props.open || 'z-index 0.2s ease-in-out'};
+  -webkit-transition: ${(props) => props.open || 'all 0.1s ease-in-out'};
+  transition: ${(props) => props.open || 'all 0.1s ease-in-out'};
   z-index: ${(props) => (props.open ? 999 : -999)};
 `;
 

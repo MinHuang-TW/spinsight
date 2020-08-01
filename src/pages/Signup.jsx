@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import Input from '../elements/Input';
 import Modal from '../elements/Modal';
 import Button from '../elements/Button';
+import Divider from '../elements/Divider';
 import AddIcon from '../images/addIcon.png';
 import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
@@ -33,7 +34,7 @@ const Signup = () => {
         <AddButton avatar={avatar} onClick={handleOpen}>
           <img
             width={avatar ? '100%' : 32}
-            src={avatar ? avatar : AddIcon}
+            src={avatar || AddIcon}
             alt='add icon'
           />
         </AddButton>
@@ -99,6 +100,7 @@ const AvatarModal = styled(Modal)`
   top: ${(props) => (props.open ? '8.5rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
   transform: translate(-50%, 0%);
+  --webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 `;
 
@@ -156,14 +158,4 @@ const Photo = styled.img`
   border-radius: 50%;
   box-shadow: ${(props) =>
     props.selected && `0 0 8px 3px ${props.theme.primary}`};
-`;
-
-const Divider = styled.hr`
-  margin: 0px;
-  width: 100%;
-  border-width: 0px;
-  height: 1px;
-  background: ${(props) => props.theme.secondary};
-  opacity: 0.5;
-  margin: 1rem auto;
 `;
