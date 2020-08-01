@@ -1,11 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Title from '../elements/Title';
-import Navbar from '../elements/Navbar';
 import RadioButton from '../elements/RadioButton';
-import AddIcon from '../images/editIcon.png';
-import Avatar from '../images/avatar/W2.png';
+import Title from '../elements/Title';
+import Navbar from '../components/Navbar';
 
 const Home = () => {
   return (
@@ -17,18 +14,7 @@ const Home = () => {
         Question
       </RadioButton>
 
-      <Navbar>
-        <Link to='/addQuestion'>
-          <RadioButton border>
-            <img width={25} src={AddIcon} alt='add new question' />
-          </RadioButton>
-        </Link>
-        <Link to='profile'>
-          <RadioButton>
-            <img width={56} src={Avatar} alt='avatar' />
-          </RadioButton>
-        </Link>
-      </Navbar>
+      <Navbar homepage />
     </Layout>
   );
 };

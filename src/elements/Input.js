@@ -5,7 +5,6 @@ export default styled.input`
   height: ${(props) => props.height && props.height};
   padding: 0.25rem 0.5rem;
   color: ${(props) => props.theme.secondary};
-  background: white;
   font-size: 1rem;
   border: 0.5px solid #9f9f9f;
   box-sizing: border-box;

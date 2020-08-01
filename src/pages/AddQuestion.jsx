@@ -1,15 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
 import Layout from '../components/Layout';
 import Title from '../elements/Title';
-import Navbar from '../elements/Navbar';
-import RadioButton from '../elements/RadioButton';
-import HomeIcon from '../images/homeIcon.png';
-import Avatar from '../images/avatar/W2.png';
+import Navbar from '../components/Navbar';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
 const AddQuestion = () => {
+  const [checked, setChecked] = useState(false);
+
+  const handleCheck = useCallback(() => {
+    setChecked(!checked);
+  }, [checked]);
+
   return (
     <Layout>
       <Title>Hello, Jane !</Title>
@@ -18,28 +20,18 @@ const AddQuestion = () => {
         <Subtitle>What would you like to ask your colleagues ?</Subtitle>
         <Main>
           <QuestionInput placeholder='Ask a Question...' />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <input type='checkbox' />
-            <p>Delete the question after 1 day.</p>
-          </div>
+          <Checkbox>
+            <input type='checkbox' checked={checked} onChange={handleCheck} />
+            <Checkmark />
+            Delete the question after 1 day.
+          </Checkbox>
         </Main>
         <Button style={{ margin: 0 }} disabled>
           submit
         </Button>
       </Container>
 
-      <Navbar>
-        <Link to='/'>
-          <RadioButton border>
-            <img width={25} src={HomeIcon} alt='home icon' />
-          </RadioButton>
-        </Link>
-        <Link to='/profile'>
-          <RadioButton>
-            <img width={56} src={Avatar} alt='avatar' />
-          </RadioButton>
-        </Link>
-      </Navbar>
+      <Navbar />
     </Layout>
   );
 };
@@ -64,28 +56,75 @@ const Container = styled.section`
 
 const Main = styled.div`
   width: 100%;
-  height: 40%;
+  height: 32.5%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  p {
-    font-size: 0.85rem;
-    color: ${(props) => props.theme.secondary};
-    margin-left: 0.5rem;
-  }
 `;
 
 const QuestionInput = styled.textarea`
   width: 100%;
   height: 100%;
-  padding-top: 0.25rem;
-  padding-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
   font-size: 1rem;
   border: 0.5px solid #9f9f9f;
   color: ${(props) => props.theme.secondary};
   box-sizing: border-box;
-
   &:-webkit-autofill {
     -webkit-text-fill-color: ${(props) => props.theme.secondary} !important;
+  }
+`;
+
+const Checkmark = styled.span`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 1px solid ${(props) => props.theme.secondary};
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    left: 8px;
+    top: 4px;
+    width: 5px;
+    height: 10px;
+    border: solid ${(props) => props.theme.secondary};
+    border-width: 0 1px 1px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+`;
+
+const Checkbox = styled.label`
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 24px;
+  color: ${(props) => props.theme.secondary};
+  margin-top: 1rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    &:checked ~ ${Checkmark} {
+      background: ${(props) => props.theme.primary};
+      border: 1px solid ${(props) => props.theme.primary};
+    }
+    &:checked ~ ${Checkmark}::after {
+      border-color: white;
+    }
   }
 `;
