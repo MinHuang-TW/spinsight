@@ -26,7 +26,7 @@ const AddQuestion = () => {
         </h2>
       </Popup>
 
-      <h1>${submited ? 'Good job' : 'Hello'}, Jane !</h1>
+      <h1>{submited ? 'Good job' : 'Hello'}, Jane !</h1>
 
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>

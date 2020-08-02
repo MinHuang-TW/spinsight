@@ -9,7 +9,7 @@ export const theme = {
   character: '#E9D011',
   life: '#B6BF26',
   permanent: '#A0C7CC',
-  limited: '#A0C7CC',
+  limited: '#F2B632',
 };
 
 export const colors = [

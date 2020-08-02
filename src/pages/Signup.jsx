@@ -29,8 +29,8 @@ const Signup = () => {
   );
 
   return (
-    <Layout>
-      <Container guttertop front>
+    <Layout width='62%' margin='5rem auto'>
+      <AddContainer>
         <AddButton avatar={avatar} onClick={handleOpen}>
           <img
             width={avatar ? '100%' : 32}
@@ -39,7 +39,7 @@ const Signup = () => {
           />
         </AddButton>
         <Text>{avatar ? 'change' : 'choose'} your Avatar</Text>
-      </Container>
+      </AddContainer>
 
       <AvatarModal open={isOpen}>
         <Grid>
@@ -70,24 +70,30 @@ const Signup = () => {
         </Button>
       </AvatarModal>
 
-      <Container>
-        <Input type='text' placeholder='Name' />
-        <Input type='password' placeholder='Password' />
-        <Input type='password' placeholder='Confirm Password' />
-      </Container>
+      <SignupForm>
+        <Input name='text' type='text' label='Name' placeholder='Name' />
+        <Input
+          name='password'
+          type='password'
+          label='Password'
+          placeholder='Password'
+        />
+        <Input
+          name='confirm password'
+          type='password'
+          label='Confirm Password'
+          placeholder='Confirm Password'
+        />
+      </SignupForm>
 
-      <Container width='56%' gutterBottom>
-        <Link to='/login'>
-          <Button fullWidth gutterBottom>
-            Log in
-          </Button>
-        </Link>
-        <Link to='/'>
-          <Button fullWidth disabled>
-            sign up
-          </Button>
-        </Link>
-      </Container>
+      <Link to='/login'>
+        <Button fullWidth gutterBottom>
+          Log in
+        </Button>
+      </Link>
+      <Button type='submit' fullWidth>
+        sign up
+      </Button>
     </Layout>
   );
 };
@@ -104,17 +110,24 @@ const AvatarModal = styled(Modal)`
   transition: all 0.2s ease-in-out;
 `;
 
-const Container = styled.div`
+const Text = styled.p`
+  color: ${(props) => props.theme.secondary};
+  margin-bottom: 0px;
+  text-transform: capitalize;
+`;
+
+const AddContainer = styled.div`
   display: flex;
-  width: ${(props) => (props.width ? props.width : '60%')};
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: ${(props) => (props.guttertop ? '5rem' : 0)};
-  margin-bottom: ${(props) => (props.gutterBottom ? '5rem' : 0)};
-  z-index: ${(props) => props.front && 10};
+  z-index: 10;
   a {
     width: 100%;
+  }
+  ${Text} {
+    margin-top: 1rem;
   }
 `;
 
@@ -132,10 +145,12 @@ const AddButton = styled.button`
   box-sizing: border-box;
 `;
 
-const Text = styled.p`
-  color: ${(props) => props.theme.secondary};
-  margin-bottom: 0px;
-  text-transform: capitalize;
+const SignupForm = styled.form`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const Grid = styled.div`

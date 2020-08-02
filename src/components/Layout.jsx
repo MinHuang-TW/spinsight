@@ -2,22 +2,23 @@ import React from 'react';
 import TopBar from './TopBar';
 import styled from 'styled-components';
 
-const Layout = ({ barHeight, children }) => {
-  return (
-    <>
-      <TopBar height={barHeight} />
-      <Main>{children}</Main>
-    </>
-  );
-};
+const Layout = ({ barHeight, width, margin, children }) => (
+  <>
+    <TopBar height={barHeight} />
+    <Main width={width} margin={margin}>
+      {children}
+    </Main>
+  </>
+);
 
 export default Layout;
 
 const Main = styled.main`
-  width: 100%;
+  position: relative;
+  margin: ${(props) => props.margin || 'auto'};
+  width: ${(props) => props.width || '100%'};
   max-width: 600px;
   height: 100%;
-  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

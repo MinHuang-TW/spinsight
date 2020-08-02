@@ -13,19 +13,19 @@ const Navbar = ({ homepage }) => {
     <Container>
       {homepage ? (
         <Link to='/addQuestion'>
-          <RadioButton border style={shadow}>
+          <RadioButton border style={shadow} aria-label='add question'>
             <img width={25} src={AddIcon} alt='add new question' />
           </RadioButton>
         </Link>
       ) : (
         <Link to='/'>
-          <RadioButton border style={shadow}>
+          <RadioButton border style={shadow} aria-label='home'>
             <img width={25} src={HomeIcon} alt='home icon' />
           </RadioButton>
         </Link>
       )}
       <Link to='/profile'>
-        <RadioButton style={shadow}>
+        <RadioButton style={shadow} aria-label='profile'>
           <img width={56} src={Avatar} alt='avatar' />
         </RadioButton>
       </Link>
@@ -41,4 +41,7 @@ const Container = styled.nav`
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
+  a {
+    width: auto;
+  }
 `;

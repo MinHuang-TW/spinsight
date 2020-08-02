@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
@@ -14,6 +15,7 @@ const Home = () => {
   const [category, setCategory] = useState(null);
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [questions, setQuestions] = useState(null);
 
   const handleCancel = useCallback(({ target }) => {
     if (target.tagName !== 'SECTION') return;
@@ -53,14 +55,30 @@ const Home = () => {
     setClicked(false);
   }, []);
 
+  useEffect(() => {
+    axios
+      .get('/questions')
+      .then((res) => setQuestions(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  let displayedQuestion = questions
+    ? questions.filter((q) => q.category === 'category')
+    : 'loading...';
+
   return (
     <Layout>
       <h1>Hello, Jane !</h1>
 
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
-          <h2>Who has blue eyes?</h2>
-          <Input placeholder='Answer' />
+          <h2>{displayedQuestion}</h2>
+          <Input
+            type='text'
+            name='answer'
+            label='Answer'
+            placeholder='Answer'
+          />
           <Button>Submit</Button>
         </PopupContainer>
       </Popup>

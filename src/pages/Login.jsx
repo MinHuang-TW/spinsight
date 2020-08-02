@@ -1,46 +1,89 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
+import Progress from '../components/Progress';
 import Input from '../elements/Input';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
-const Login = () => {
+const Login = ({ history }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [state, setState] = useState({
+    loading: false,
+    errors: {},
+  });
+
+  const handleChange = useCallback(({ target: input }) => {
+    if (input.name === 'email') setEmail(input.value);
+    else setPassword(input.value);
+  }, []);
+
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      setState({ loading: true });
+      axios
+        .post('/login', { email, password })
+        .then((res) => {
+          setState({ loading: false });
+          history.push('/');
+        })
+        .catch((err) => {
+          setState({ loading: false, errors: err.response.data });
+        });
+    },
+    [history, email, password]
+  );
+
   return (
-    <Layout barHeight='6.5rem'>
+    <Layout barHeight='6.5rem' width='62%' margin='0 auto 5rem'>
       <h1>Welcome back !</h1>
+      {state.loading && <Progress login />}
+      <LoginForm id='loginForm' onSubmit={handleSubmit}>
+        <Input
+          name='email'
+          type='email'
+          label='Email'
+          placeholder='email'
+          value={email}
+          onChange={handleChange}
+        />
+        <Input
+          name='password'
+          type='password'
+          label='Password'
+          placeholder='Password'
+          autoComplete='new-password'
+          value={password}
+          onChange={handleChange}
+        />
+      </LoginForm>
 
-      <Container>
-        <Input type='text' placeholder='Name' />
-        <Input type='password' placeholder='Password' />
-      </Container>
+      <Button
+        type='submit'
+        form='loginForm'
+        fullWidth
+        gutterBottom
+        disabled={email === '' || password === ''}
+      >
+        Log in
+      </Button>
 
-      <Container width='56%' gutterBottom>
-        <Link to='/'>
-          <Button fullWidth gutterBottom disabled>
-            Log in
-          </Button>
-        </Link>
-        <Link to='/signup'>
-          <Button fullWidth>sign up</Button>
-        </Link>
-      </Container>
+      <Link to='/signup'>
+        <Button fullWidth>sign up</Button>
+      </Link>
     </Layout>
   );
 };
 
 export default Login;
 
-const Container = styled.div`
-  width: ${(props) => props.width || '60%'};
+const LoginForm = styled.form`
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  margin-bottom: ${(props) => (props.gutterBottom ? '5rem' : 0)};
-  width: ${(props) => props.width};
-  z-index: ${(props) => props.front && 10};
-  a {
-    width: 100%;
-  }
 `;
