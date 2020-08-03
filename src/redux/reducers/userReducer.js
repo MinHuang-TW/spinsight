@@ -1,14 +1,15 @@
 import {
   SET_USER,
-  // SET_ERRORS,
-  // CLEAR_ERRORS,
-  // LOADING_UI,
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
+  LOADING_USER,
+  SAVE_QUESTION,
+  UNSAVE_QUESTION,
 } from '../types';
 
 const initialState = {
   authenticated: false,
+  loading: false,
   credentials: {},
   answers: [],
   saves: [],
@@ -21,13 +22,43 @@ export default function (state = initialState, action) {
         ...state,
         authenticated: true,
       };
+
     case SET_UNAUTHENTICATED:
       return initialState;
+
     case SET_USER:
       return {
         authenticated: true,
+        loading: false,
         ...action.payload,
       };
+
+    case LOADING_USER:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case SAVE_QUESTION:
+      return {
+        ...state,
+        saves: [
+          ...state.saves,
+          {
+            name: state.credentials.name,
+            questionId: action.payload.questionId,
+          },
+        ],
+      };
+
+    case UNSAVE_QUESTION:
+      return {
+        ...state,
+        saves: state.saves.filter(
+          (save) => save.questionId === action.payload.questionId
+        ),
+      };
+
     default:
       return state;
   }

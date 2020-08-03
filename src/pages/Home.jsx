@@ -1,5 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  getQuestions,
+  saveQuestion,
+  unsaveQuestion,
+} from '../redux/actions/dataActions';
+
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
@@ -11,12 +18,11 @@ import SpinWheel from '../images/spinWheel.png';
 import Pointer from '../images/pointer.png';
 import styled, { css, keyframes } from 'styled-components';
 
-const Home = () => {
+const Home = ({ getQuestions, name, data: { questions, loading } }) => {
   const [clicked, setClicked] = useState(false);
   const [category, setCategory] = useState(null);
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [questions, setQuestions] = useState(null);
 
   const handleCancel = useCallback(({ target }) => {
     if (target.tagName !== 'SECTION') return;
@@ -57,13 +63,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    axios
-      .get('/questions')
-      .then((res) => setQuestions(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+    getQuestions();
+  }, []); // eslint-disable-line
 
-  let displayedQuestion = questions ? (
+  let displayedQuestion = !loading ? (
     questions.filter((q) => q.category === category)
   ) : (
     <Progress />
@@ -71,7 +74,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <h1>Hello, Jane !</h1>
+      <h1>Hello, {name} !</h1>
 
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
@@ -108,7 +111,26 @@ const Home = () => {
   );
 };
 
-export default Home;
+Home.propTypes = {
+  getQuestions: PropTypes.func.isRequired,
+  saveQuestion: PropTypes.func.isRequired,
+  unsaveQuestion: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  name: state.user.credentials.name,
+  data: state.data,
+});
+
+const mapActionsToProps = {
+  getQuestions,
+  saveQuestion,
+  unsaveQuestion,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Home);
 
 const PopupContainer = styled.div`
   width: 70%;

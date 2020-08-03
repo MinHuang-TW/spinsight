@@ -1,39 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import RadioButton from '../elements/RadioButton';
 import HomeIcon from '../images/homeIcon.png';
 import AddIcon from '../images/editIcon.png';
-import Avatar from '../images/avatar/W2.png';
 import styled from 'styled-components';
 
-const Navbar = ({ homepage }) => {
-  const shadow = { boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)' };
-
-  return (
-    <Container>
-      {homepage ? (
-        <Link to='/addQuestion'>
-          <RadioButton border style={shadow} aria-label='add question'>
-            <img width={25} src={AddIcon} alt='add new question' />
-          </RadioButton>
-        </Link>
-      ) : (
-        <Link to='/'>
-          <RadioButton border style={shadow} aria-label='home'>
-            <img width={25} src={HomeIcon} alt='home icon' />
-          </RadioButton>
-        </Link>
-      )}
-      <Link to='/profile'>
-        <RadioButton style={shadow} aria-label='profile'>
-          <img width={56} src={Avatar} alt='avatar' />
+const Navbar = ({
+  homepage,
+  user: {
+    credentials: { image },
+  },
+}) => (
+  <Container>
+    {homepage ? (
+      <Link to='/addQuestion'>
+        <RadioButton border aria-label='add question'>
+          <img width={25} src={AddIcon} alt='add new question' />
         </RadioButton>
       </Link>
-    </Container>
-  );
-};
+    ) : (
+      <Link to='/'>
+        <RadioButton border aria-label='home'>
+          <img width={25} src={HomeIcon} alt='home icon' />
+        </RadioButton>
+      </Link>
+    )}
+    <Link to='/profile'>
+      <RadioButton aria-label='profile'>
+        <img width={56} src={image} alt='avatar' />
+      </RadioButton>
+    </Link>
+  </Container>
+);
 
-export default Navbar;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(Navbar);
 
 const Container = styled.nav`
   width: 86%;
@@ -43,5 +49,8 @@ const Container = styled.nav`
   justify-content: space-between;
   a {
     width: auto;
+  }
+  ${RadioButton} {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   }
 `;

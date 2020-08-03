@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
+import { connect } from 'react-redux';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 import Popup from '../components/Popup';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
-const AddQuestion = () => {
+const AddQuestion = ({ name }) => {
   const [checked, setChecked] = useState(false);
   const [submited, setSubmited] = useState(false);
 
@@ -26,7 +27,9 @@ const AddQuestion = () => {
         </h2>
       </Popup>
 
-      <h1>{submited ? 'Good job' : 'Hello'}, Jane !</h1>
+      <h1>
+        {submited ? 'Good job' : 'Hello'}, {name} !
+      </h1>
 
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>
@@ -46,7 +49,11 @@ const AddQuestion = () => {
   );
 };
 
-export default AddQuestion;
+const mapStateToProps = (state) => ({
+  name: state.user.credentials.name,
+});
+
+export default connect(mapStateToProps)(AddQuestion);
 
 const Container = styled.section`
   width: 75%;

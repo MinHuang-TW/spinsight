@@ -3,6 +3,7 @@ export const theme = {
 
   primary: '#4A90E2',
   secondary: '#8A8785',
+  strong: '#4A4A4A',
 
   appearance: '#D53D4E',
   belongings: '#457697',

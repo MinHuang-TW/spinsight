@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logoutUser } from '../redux/actions/userActions';
+
 import Layout from '../components/Layout';
 import LightBulb from '../components/LightBlub';
 import RadioButton from '../elements/RadioButton';
+import Button from '../elements/Button';
+import Progress from '../components/Progress';
 import Line from '../elements/Divider';
 import CancelIcon from '../images/cancelIcon.png';
 import {
@@ -23,7 +28,14 @@ const CategoryBlock = ({ icon, amount, category }) => (
   </CategoryContainer>
 );
 
-const Profile = () => {
+const Profile = ({
+  logoutUser,
+  user: {
+    credentials: { name, image },
+    answers,
+    loading,
+  },
+}) => {
   const icons = [
     { appearance: appearance },
     { belongings: belongings },
@@ -33,45 +45,68 @@ const Profile = () => {
     { limited: limited },
   ];
 
+  const handleLogout = useCallback(() => {
+    logoutUser();
+  }, [logoutUser]);
+
   return (
     <Layout>
-      <Container>
-        <LightBulb count={8} />
+      {!loading ? (
+        <Container>
+          <LightBulb count={8} />
+          {image ? (
+            <img width={100} src={image} alt='avatar' />
+          ) : (
+            <div style={{ height: 100 }} />
+          )}
+          <Title>{name}</Title>
 
-        <h1>Hello</h1>
+          <Divider>
+            <p>{`${answers.length} Answers`}</p>
+            <Line />
+          </Divider>
 
-        <Divider>
-          <p>Answers</p>
-          <Line />
-        </Divider>
+          <Grid>
+            {icons.map((icon, index) => (
+              <CategoryBlock
+                key={Object.keys(icon)}
+                icon={Object.values(icon)}
+                category={Object.keys(icon)}
+                amount={index}
+              />
+            ))}
+          </Grid>
 
-        <Grid>
-          {icons.map((icon, index) => (
-            <CategoryBlock
-              key={Object.keys(icon)}
-              icon={Object.values(icon)}
-              category={Object.keys(icon)}
-              amount={index}
-            />
-          ))}
-        </Grid>
+          <Divider>
+            <p>Questions</p>
+            <Line />
+          </Divider>
 
-        <Divider>
-          <p>Questions</p>
-          <Line />
-        </Divider>
-      </Container>
+          <LogoutButton onClick={handleLogout}>log out</LogoutButton>
 
-      <Link to='/'>
-        <Button aria-label='cancel'>
-          <img width={40} src={CancelIcon} alt='cancel icon' />
-        </Button>
-      </Link>
+          <Link to='/'>
+            <BackButton aria-label='cancel'>
+              <img width={40} src={CancelIcon} alt='cancel icon' />
+            </BackButton>
+          </Link>
+        </Container>
+      ) : (
+        <Progress />
+      )}
     </Layout>
   );
 };
 
-export default Profile;
+Profile.propTypes = {
+  user: PropTypes.object.isRequired,
+  logoutUser: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, { logoutUser })(Profile);
 
 const Container = styled.div`
   background: white;
@@ -80,6 +115,19 @@ const Container = styled.div`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 0px 0px 1rem 1rem;
   padding-bottom: 6.5rem;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 1.5rem;
+  margin: 1rem auto 0;
+  color: ${(props) => props.theme.strong};
+  opacity: 1;
 `;
 
 const Grid = styled.div`
@@ -127,7 +175,7 @@ const CategoryContainer = styled.div`
   }
 `;
 
-const Button = styled(RadioButton)`
+const BackButton = styled(RadioButton)`
   width: 3rem;
   height: 3rem;
   background: #b2b2b2;
@@ -136,4 +184,10 @@ const Button = styled(RadioButton)`
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
+`;
+
+const LogoutButton = styled(Button)`
+  background: white;
+  color: ${(props) => props.theme.primary};
+  border: 1.5px solid ${(props) => props.theme.primary};
 `;
