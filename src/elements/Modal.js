@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export default styled.div`
   position: absolute;
-  width: 90%;
+  width: 90vw;
   max-width: 360px;
   background: white;
   padding-top: ${(props) => props.padding || '2.5rem'};

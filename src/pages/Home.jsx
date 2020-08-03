@@ -3,6 +3,7 @@ import axios from 'axios';
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
+import Progress from '../components/Progress';
 import Input from '../elements/Input.js';
 import Button from '../elements/Button';
 import RadioButton from '../elements/RadioButton';
@@ -62,9 +63,11 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  let displayedQuestion = questions
-    ? questions.filter((q) => q.category === 'category')
-    : 'loading...';
+  let displayedQuestion = questions ? (
+    questions.filter((q) => q.category === category)
+  ) : (
+    <Progress />
+  );
 
   return (
     <Layout>
@@ -72,7 +75,9 @@ const Home = () => {
 
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
-          <h2>{displayedQuestion}</h2>
+          <h2>
+            {displayedQuestion.length > 0 && displayedQuestion[0].question}
+          </h2>
           <Input
             type='text'
             name='answer'

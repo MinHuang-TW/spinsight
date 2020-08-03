@@ -3,15 +3,23 @@ import TopBar from './TopBar';
 import styled from 'styled-components';
 
 const Layout = ({ barHeight, width, margin, children }) => (
-  <>
+  <Window>
     <TopBar height={barHeight} />
     <Main width={width} margin={margin}>
       {children}
     </Main>
-  </>
+  </Window>
 );
 
 export default Layout;
+
+const Window = styled.div`
+  /* width: 100vw; */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f1f1;
+`;
 
 const Main = styled.main`
   position: relative;
@@ -23,4 +31,6 @@ const Main = styled.main`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
+  color: ${(props) => props.theme.secondary};
 `;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
+import LightBulb from '../components/LightBlub';
 import RadioButton from '../elements/RadioButton';
 import Line from '../elements/Divider';
 import CancelIcon from '../images/cancelIcon.png';
@@ -34,6 +35,8 @@ const Profile = () => {
   return (
     <Layout>
       <Container>
+        <LightBulb count={8} />
+
         <h1>Hello</h1>
 
         <Divider>

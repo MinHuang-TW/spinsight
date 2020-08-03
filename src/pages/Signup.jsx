@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Layout from '../components/Layout';
 import Input from '../elements/Input';
 import Modal from '../elements/Modal';
@@ -9,9 +10,20 @@ import AddIcon from '../images/addIcon.png';
 import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
 
-const Signup = () => {
+const Signup = ({ history }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [avatar, setAvatar] = useState(null);
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [state, setState] = useState({
+    loading: false,
+    errors: {},
+  });
+
+  const validation =
+    name === '' || email === '' || password === '' || confirmPassword === '';
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
@@ -21,68 +33,126 @@ const Signup = () => {
     setIsOpen(false);
   }, []);
 
-  const handleAvatar = useCallback(
+  const handleImage = useCallback(
     (avatar) => () => {
-      setAvatar(avatar);
+      setImage(avatar);
     },
     []
   );
 
+  const handleChange = useCallback(({ target: input }) => {
+    switch (input.name) {
+      case 'name':
+        return setName(input.value);
+      case 'email':
+        return setEmail(input.value);
+      case 'password':
+        return setPassword(input.value);
+      case 'confirmPassword':
+        return setConfirmPassword(input.value);
+      default:
+        break;
+    }
+  }, []);
+
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      setState({ loading: true });
+      axios
+        .post('/signup', {
+          name,
+          email,
+          password,
+          confirmPassword,
+          image,
+        })
+        .then((res) => {
+          localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
+          setState({ loading: false });
+          history.push('/');
+        })
+        .catch((err) => {
+          setState({ loading: false, errors: err.response.data });
+        });
+    },
+    [history, name, email, password, confirmPassword, image]
+  );
+
   return (
-    <Layout width='62%' margin='5rem auto'>
+    <Layout width='62%' margin='5rem auto 0'>
       <AddContainer>
-        <AddButton avatar={avatar} onClick={handleOpen}>
+        <AddButton avatar={image} onClick={handleOpen}>
           <img
-            width={avatar ? '100%' : 32}
-            src={avatar || AddIcon}
+            width={image ? '100%' : 32}
+            src={image || AddIcon}
             alt='add icon'
           />
         </AddButton>
-        <Text>{avatar ? 'change' : 'choose'} your Avatar</Text>
+        <Text>{image ? 'change' : 'choose'} your Avatar</Text>
       </AddContainer>
 
       <AvatarModal open={isOpen}>
         <Grid>
-          {WomenAvatars.map((photo) => (
-            <Photo
-              key={photo}
-              src={photo}
+          {WomenAvatars.map((avatar) => (
+            <Avatar
+              key={avatar}
+              src={avatar}
               alt='woman avatar'
-              selected={photo === avatar}
-              onClick={handleAvatar(photo)}
+              selected={avatar === image}
+              onClick={handleImage(avatar)}
             />
           ))}
         </Grid>
         <Divider />
         <Grid>
-          {MenAvatars.map((photo) => (
-            <Photo
-              key={photo}
-              src={photo}
+          {MenAvatars.map((avatar) => (
+            <Avatar
+              key={avatar}
+              src={avatar}
               alt='man avatar'
-              selected={photo === avatar}
-              onClick={handleAvatar(photo)}
+              selected={avatar === image}
+              onClick={handleImage(avatar)}
             />
           ))}
         </Grid>
-        <Button disabled={!avatar} onClick={handleClose}>
+        <Button disabled={!image} onClick={handleClose}>
           Confirm
         </Button>
       </AvatarModal>
 
-      <SignupForm>
-        <Input name='text' type='text' label='Name' placeholder='Name' />
+      <SignupForm id='signupForm' onSubmit={handleSubmit}>
+        <Input
+          name='name'
+          type='text'
+          label='Name'
+          placeholder='Name'
+          value={name}
+          onChange={handleChange}
+        />
+        <Input
+          name='email'
+          type='email'
+          label='Email'
+          placeholder='email'
+          value={email}
+          onChange={handleChange}
+        />
         <Input
           name='password'
           type='password'
           label='Password'
+          value={password}
           placeholder='Password'
+          onChange={handleChange}
         />
         <Input
-          name='confirm password'
+          name='confirmPassword'
           type='password'
-          label='Confirm Password'
+          label='ConfirmPassword'
+          value={confirmPassword}
           placeholder='Confirm Password'
+          onChange={handleChange}
         />
       </SignupForm>
 
@@ -91,9 +161,7 @@ const Signup = () => {
           Log in
         </Button>
       </Link>
-      <Button type='submit' fullWidth>
-        sign up
-      </Button>
+      <SignupButton disabled={validation}>sign up</SignupButton>
     </Layout>
   );
 };
@@ -103,7 +171,7 @@ export default Signup;
 const AvatarModal = styled(Modal)`
   bottom: 0px;
   padding-top: 0;
-  top: ${(props) => (props.open ? '8.5rem' : '150vh')};
+  top: ${(props) => (props.open ? '3rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
   transform: translate(-50%, 0%);
   --webkit-transition: all 0.2s ease-in-out;
@@ -166,11 +234,19 @@ const Grid = styled.div`
   }
 `;
 
-const Photo = styled.img`
+const Avatar = styled.img`
   cursor: pointer;
   width: 100%;
   position: relative;
   border-radius: 50%;
   box-shadow: ${(props) =>
     props.selected && `0 0 8px 3px ${props.theme.primary}`};
+`;
+
+const SignupButton = styled(Button).attrs({
+  type: 'submit',
+  form: 'signupForm',
+  fullWidth: true,
+})`
+  margin-bottom: 5rem;
 `;
