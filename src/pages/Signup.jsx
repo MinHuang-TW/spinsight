@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
 import Layout from '../components/Layout';
 import Input from '../elements/Input';
 import Modal from '../elements/Modal';
@@ -10,17 +12,14 @@ import AddIcon from '../images/addIcon.png';
 import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
 
-const Signup = ({ history }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Signup = ({ signupUser, history, UI: { loading, errors } }) => {
   const [image, setImage] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [state, setState] = useState({
-    loading: false,
-    errors: {},
-  });
+  const [error, setError] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
 
   const validation =
     name === '' || email === '' || password === '' || confirmPassword === '';
@@ -58,25 +57,16 @@ const Signup = ({ history }) => {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      setState({ loading: true });
-      axios
-        .post('/signup', {
-          name,
-          email,
-          password,
-          confirmPassword,
-          image,
-        })
-        .then((res) => {
-          localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-          setState({ loading: false });
-          history.push('/');
-        })
-        .catch((err) => {
-          setState({ loading: false, errors: err.response.data });
-        });
+      const newUserData = {
+        name,
+        email,
+        password,
+        confirmPassword,
+        image,
+      };
+      signupUser(newUserData, history);
     },
-    [history, name, email, password, confirmPassword, image]
+    [signupUser, history, name, email, password, confirmPassword, image]
   );
 
   return (
@@ -166,13 +156,25 @@ const Signup = ({ history }) => {
   );
 };
 
-export default Signup;
+Signup.propTypes = {
+  signupUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+export default connect(mapStateToProps, { signupUser })(Signup);
 
 const AvatarModal = styled(Modal)`
   bottom: 0px;
   padding-top: 0;
   top: ${(props) => (props.open ? '3rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
+  -webkit-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
   --webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;

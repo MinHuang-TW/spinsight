@@ -14,6 +14,7 @@ import {
   limited,
 } from '../images/category';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const CategoryBlock = ({ icon, amount, category }) => (
   <CategoryContainer amount={amount} color={category}>
