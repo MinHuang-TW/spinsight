@@ -1,9 +1,13 @@
 import {
-  SET_QUESTION,
-  SET_QUESTIONS,
+  LOADING_UI,
   LOADING_DATA,
+  SET_QUESTIONS,
+  SET_QUESTION,
+  POST_QUESTION,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
+  SET_ERRORS,
+  CLEAR_ERRORS,
 } from '../types';
 import axios from 'axios';
 
@@ -33,6 +37,7 @@ export const setQuestion = (question) => (dispatch) => {
     type: SET_QUESTION,
     payload: question,
   });
+  // #region
   // axios
   //   .get(`question/${category}/${questionId}`)
   //   .then((res) => {
@@ -47,6 +52,27 @@ export const setQuestion = (question) => (dispatch) => {
   //       payload: [],
   //     });
   //   });
+  //#endregion
+};
+
+export const postQuestion = (newQuestion) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
+
+  axios
+    .post('/question', newQuestion)
+    .then((res) => {
+      dispatch({
+        type: POST_QUESTION,
+        payload: res.data,
+      });
+      dispatch({ type: CLEAR_ERRORS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 export const saveQuestion = (category, questionId) => (dispatch) => {
@@ -71,4 +97,8 @@ export const unsaveQuestion = (category, questionId) => (dispatch) => {
       });
     })
     .catch((err) => console.log(err));
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
 };

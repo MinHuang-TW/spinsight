@@ -1,47 +1,92 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { postQuestion, clearErrors } from '../redux/actions/dataActions';
+import PropTypes from 'prop-types';
+
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 import Popup from '../components/Popup';
+import Progress from '../components/Progress';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
-const AddQuestion = ({ name }) => {
-  const [checked, setChecked] = useState(false);
+const AddQuestion = ({
+  postQuestion,
+  clearErrors,
+  name,
+  UI: { loading, errors },
+}) => {
+  const [category, setCategory] = useState('permanent');
+  const [question, setQuestion] = useState('');
   const [submited, setSubmited] = useState(false);
 
   const handleCheck = useCallback(() => {
-    setChecked(!checked);
-  }, [checked]);
+    category === 'permanent'
+      ? setCategory('limited')
+      : setCategory('permanent');
+  }, [category]);
+
+  const handleChange = useCallback(({ target: input }) => {
+    setQuestion(input.value);
+  }, []);
+
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      const newQuestion = { category, question };
+      postQuestion(newQuestion);
+      if (!errors && !loading) setSubmited(true);
+    },
+    [postQuestion, question, category, errors, loading]
+  );
 
   const handleCancel = useCallback(({ target }) => {
     if (target.tagName !== 'SECTION') return;
     setSubmited(false);
   }, []);
 
+  useEffect(() => {
+    if (!submited) return;
+    setCategory('permanent');
+    setQuestion('');
+    errors && clearErrors();
+
+    const timer = setTimeout(() => setSubmited(false), 1600);
+    return () => clearTimeout(timer);
+  }, [submited, clearErrors, errors]);
+
   return (
     <Layout>
-      <Popup category='OK' open={submited} handleCancel={handleCancel}>
-        <h2 style={{ margin: '32px auto 48px' }}>
-          You have submitted your question successfully.
-        </h2>
-      </Popup>
+      {loading ? (
+        <Progress />
+      ) : (
+        <Popup category='OK' open={submited} handleCancel={handleCancel}>
+          <Text>You have submitted your question successfully.</Text>
+        </Popup>
+      )}
 
-      <h1>
-        {submited ? 'Good job' : 'Hello'}, {name} !
-      </h1>
-
+      <h1>Hello, {name} !</h1>
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>
-        <Main>
-          <QuestionInput placeholder='Ask a Question...' />
+        <Form onSubmit={handleSubmit}>
+          <QuestionInput value={question} onChange={handleChange} />
           <Checkbox>
-            <input type='checkbox' checked={checked} onChange={handleCheck} />
+            <input
+              type='checkbox'
+              checked={category === 'limited'}
+              onChange={handleCheck}
+            />
             <Checkmark />
             Delete the question after 1 day
           </Checkbox>
-        </Main>
-        <Button disabled>submit</Button>
+        </Form>
+        <Button
+          type='submit'
+          form='questionForm'
+          disabled={loading || question.trim() === ''}
+        >
+          submit
+        </Button>
       </Container>
 
       <Navbar />
@@ -49,11 +94,24 @@ const AddQuestion = ({ name }) => {
   );
 };
 
+AddQuestion.propTypes = {
+  postQuestion: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
+  UI: PropTypes.object.isRequired,
+  name: PropTypes.string,
+};
+
 const mapStateToProps = (state) => ({
   name: state.user.credentials.name,
+  UI: state.UI,
 });
 
-export default connect(mapStateToProps)(AddQuestion);
+const mapActionsToProps = {
+  postQuestion,
+  clearErrors,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(AddQuestion);
 
 const Container = styled.section`
   width: 75%;
@@ -67,7 +125,13 @@ const Container = styled.section`
   }
 `;
 
-const Main = styled.div`
+const Text = styled.h2`
+  margin: 32px auto 48px;
+`;
+
+const Form = styled.form.attrs({
+  id: 'questionForm',
+})`
   width: 100%;
   height: 32.5%;
   display: flex;
@@ -75,7 +139,12 @@ const Main = styled.div`
   align-items: center;
 `;
 
-const QuestionInput = styled.textarea`
+const QuestionInput = styled.textarea.attrs({
+  form: 'questionForm',
+  name: 'question',
+  placeholder: 'Ask a Question...',
+  autoFocus: true,
+})`
   width: 100%;
   height: 100%;
   padding: 0.25rem 0.5rem;

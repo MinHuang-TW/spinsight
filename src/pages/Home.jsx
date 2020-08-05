@@ -60,6 +60,12 @@ const Home = ({
     setAnswer(input.value);
   }, []);
 
+  const SaveButton = isSaved() ? (
+    <StarButton src={Star} onClick={handleUnsave} />
+  ) : (
+    <StarButton src={Unstar} onClick={handleSave} />
+  );
+
   const handleCancel = useCallback(({ target }) => {
     if (target.tagName !== 'SECTION') return;
     setShowPopup(false);
@@ -97,11 +103,7 @@ const Home = ({
 
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
-          {isSaved() ? (
-            <StarButton src={Star} onClick={handleUnsave} />
-          ) : (
-            <StarButton src={Unstar} onClick={handleSave} />
-          )}
+          {SaveButton}
           <h2>{question.question}</h2>
           <Input
             type='text'

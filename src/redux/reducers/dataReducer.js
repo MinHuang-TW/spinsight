@@ -3,6 +3,7 @@ import {
   SET_QUESTIONS,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
+  POST_QUESTION,
   LOADING_DATA,
 } from '../types';
 
@@ -40,8 +41,17 @@ export default function (state = initialState, action) {
         (question) => question.questionId === action.payload.questionId
       );
       state.questions[index] = action.payload;
+      // if (state.question.questionId === action.payload.questionId) {
+      //   state.question = actions.payload;
+      // }
       return {
         ...state,
+      };
+
+    case POST_QUESTION:
+      return {
+        ...state,
+        questions: [action.payload, ...state.questions],
       };
 
     default:
