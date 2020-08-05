@@ -1,4 +1,5 @@
 import {
+  SET_QUESTION,
   SET_QUESTIONS,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
@@ -23,6 +24,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: action.payload,
+        loading: false,
+      };
+
+    case SET_QUESTION:
+      return {
+        ...state,
+        question: action.payload,
         loading: false,
       };
 

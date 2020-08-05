@@ -35,8 +35,8 @@ export default function (state = initialState, action) {
 
     case LOADING_USER:
       return {
-        ...state,
         loading: true,
+        ...state,
       };
 
     case SAVE_QUESTION:
@@ -46,6 +46,7 @@ export default function (state = initialState, action) {
           ...state.saves,
           {
             name: state.credentials.name,
+            category: action.payload.category,
             questionId: action.payload.questionId,
           },
         ],
@@ -55,7 +56,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         saves: state.saves.filter(
-          (save) => save.questionId === action.payload.questionId
+          (save) => save.questionId !== action.payload.questionId
         ),
       };
 

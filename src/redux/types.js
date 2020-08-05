@@ -8,6 +8,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const LOADING_UI = 'LOADING_UI';
 
 export const SET_QUESTIONS = 'SET_QUESTIONS';
+export const SET_QUESTION = 'SET_QUESTION';
 export const SAVE_QUESTION = 'SAVE_QUESTION';
 export const UNSAVE_QUESTION = 'UNSAVE_QUESTION';
 export const LOADING_DATA = 'LOADING_DATA';

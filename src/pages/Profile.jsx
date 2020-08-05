@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/actions/userActions';
-
 import Layout from '../components/Layout';
 import LightBulb from '../components/LightBlub';
 import RadioButton from '../elements/RadioButton';
@@ -10,23 +9,19 @@ import Button from '../elements/Button';
 import Progress from '../components/Progress';
 import Line from '../elements/Divider';
 import CancelIcon from '../images/cancelIcon.png';
-import {
-  appearance,
-  belongings,
-  character,
-  life,
-  permanent,
-  limited,
-} from '../images/category';
+import { fetchIcon } from '../images/category';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const CategoryBlock = ({ icon, amount, category }) => (
-  <CategoryContainer amount={amount} color={category}>
-    <img src={icon} alt={icon} />
-    <p>{amount}</p>
-  </CategoryContainer>
-);
+const CategoryBlock = ({ answers, name }) => {
+  const count = answers.filter(({ category }) => category === name).length;
+  return (
+    <CategoryContainer count={count} color={name}>
+      <img src={fetchIcon(name)} alt={name} />
+      <p>{count}</p>
+    </CategoryContainer>
+  );
+};
 
 const Profile = ({
   logoutUser,
@@ -36,13 +31,13 @@ const Profile = ({
     loading,
   },
 }) => {
-  const icons = [
-    { appearance: appearance },
-    { belongings: belongings },
-    { character: character },
-    { life: life },
-    { permanent: permanent },
-    { limited: limited },
+  const categories = [
+    'appearance',
+    'belongings',
+    'character',
+    'life',
+    'permanent',
+    'limited',
   ];
 
   const handleLogout = useCallback(() => {
@@ -53,7 +48,7 @@ const Profile = ({
     <Layout>
       {!loading ? (
         <Container>
-          <LightBulb count={8} />
+          <LightBulb answers={answers} />
           {image ? (
             <img width={100} src={image} alt='avatar' />
           ) : (
@@ -62,18 +57,13 @@ const Profile = ({
           <Title>{name}</Title>
 
           <Divider>
-            <p>{`${answers.length} Answers`}</p>
+            <p>{`${answers.length} Answer${answers.length > 0 ? 's' : ''}`}</p>
             <Line />
           </Divider>
 
           <Grid>
-            {icons.map((icon, index) => (
-              <CategoryBlock
-                key={Object.keys(icon)}
-                icon={Object.values(icon)}
-                category={Object.keys(icon)}
-                amount={index}
-              />
+            {categories.map((category) => (
+              <CategoryBlock key={category} name={category} answers={answers} />
             ))}
           </Grid>
 
@@ -113,7 +103,7 @@ const Container = styled.div`
   width: 95%;
   max-width: 400px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-  border-radius: 0px 0px 1rem 1rem;
+  /* border-radius: 0px 0px 1rem 1rem; */
   padding-bottom: 6.5rem;
   overflow-y: auto;
   -ms-overflow-style: none;
@@ -161,7 +151,7 @@ const Divider = styled.div`
 
 const CategoryContainer = styled.div`
   text-align: center;
-  opacity: ${({ amount }) => (amount > 0 ? 1 : 0.2)};
+  opacity: ${({ count }) => (count ? 1 : 0.2)};
 
   img {
     width: 100%;

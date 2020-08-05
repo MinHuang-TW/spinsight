@@ -2,14 +2,17 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  getQuestions,
+  getCategoryQuestions,
+  setQuestion,
   saveQuestion,
   unsaveQuestion,
 } from '../redux/actions/dataActions';
-
+import { fetchCategory } from '../images/category';
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
+import Star from '../images/star.png';
+import Unstar from '../images/unstar.png';
 import Progress from '../components/Progress';
 import Input from '../elements/Input.js';
 import Button from '../elements/Button';
@@ -18,11 +21,44 @@ import SpinWheel from '../images/spinWheel.png';
 import Pointer from '../images/pointer.png';
 import styled, { css, keyframes } from 'styled-components';
 
-const Home = ({ getQuestions, name, data: { questions, loading } }) => {
-  const [clicked, setClicked] = useState(false);
+const Home = ({
+  getCategoryQuestions,
+  setQuestion,
+  saveQuestion,
+  unsaveQuestion,
+  user: {
+    credentials: { name },
+    saves,
+  },
+  data: { questions, question, loading },
+}) => {
   const [category, setCategory] = useState(null);
+  const [answer, setAnswer] = useState('');
+  const [clicked, setClicked] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const randomize = (number) => Math.floor(Math.random() * number);
+
+  const isSaved = useCallback(() => {
+    if (
+      saves &&
+      saves.find(({ questionId }) => questionId === question.questionId)
+    )
+      return true;
+    else return false;
+  }, [saves, question]);
+
+  const handleSave = useCallback(() => {
+    saveQuestion(question.category, question.questionId);
+  }, [question, saveQuestion]);
+
+  const handleUnsave = useCallback(() => {
+    unsaveQuestion(question.category, question.questionId);
+  }, [question, unsaveQuestion]);
+
+  const handleChange = useCallback(({ target: input }) => {
+    setAnswer(input.value);
+  }, []);
 
   const handleCancel = useCallback(({ target }) => {
     if (target.tagName !== 'SECTION') return;
@@ -31,46 +67,29 @@ const Home = ({ getQuestions, name, data: { questions, loading } }) => {
 
   const handleSpin = useCallback(() => {
     setClicked(true);
-    const random = Math.floor(Math.random() * 6);
-    const getRotation = (random) => 2160 + random * 60;
-    switch (random) {
-      case 0:
-        setCategory('appearance');
-        break;
-      case 1:
-        setCategory('limited');
-        break;
-      case 2:
-        setCategory('character');
-        break;
-      case 3:
-        setCategory('life');
-        break;
-      default:
-      case 4:
-        setCategory('permanent');
-        break;
-      case 5:
-        setCategory('belongings');
-        break;
-    }
-    setRotation(getRotation(random));
+
+    const randomNumber = randomize(6); // return 0 - 5
+    const randomCategory = fetchCategory(randomNumber);
+    setCategory(randomCategory);
+
+    const getRotation = (number) => 2160 + number * 60;
+    setRotation(getRotation(randomNumber));
   }, []);
 
   const handleSpinEnd = useCallback(() => {
+    if (!questions.length) return;
+    const index = randomize(questions.length);
+    const resultQuestion = questions[index];
+    setQuestion(resultQuestion);
+
     setShowPopup(true);
     setClicked(false);
-  }, []);
+  }, [questions, setQuestion]);
 
   useEffect(() => {
-    getQuestions();
-  }, []); // eslint-disable-line
-
-  let displayedQuestion = !loading ? (
-    questions.filter((q) => q.category === category)
-  ) : (
-    <Progress />
-  );
+    if (!category) return;
+    getCategoryQuestions(category);
+  }, [category, getCategoryQuestions]);
 
   return (
     <Layout>
@@ -78,16 +97,21 @@ const Home = ({ getQuestions, name, data: { questions, loading } }) => {
 
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
-          <h2>
-            {displayedQuestion.length > 0 && displayedQuestion[0].question}
-          </h2>
+          {isSaved() ? (
+            <StarButton src={Star} onClick={handleUnsave} />
+          ) : (
+            <StarButton src={Unstar} onClick={handleSave} />
+          )}
+          <h2>{question.question}</h2>
           <Input
             type='text'
             name='answer'
             label='Answer'
             placeholder='Answer'
+            value={answer}
+            onChange={handleChange}
           />
-          <Button>Submit</Button>
+          <Button disabled={answer.trim() === ''}>Submit</Button>
         </PopupContainer>
       </Popup>
 
@@ -99,7 +123,6 @@ const Home = ({ getQuestions, name, data: { questions, loading } }) => {
         <img src={Pointer} alt='pointer' />
         <Wheel
           src={SpinWheel}
-          alt='spin wheel'
           clicked={clicked}
           rotation={rotation}
           onAnimationEnd={handleSpinEnd}
@@ -112,7 +135,8 @@ const Home = ({ getQuestions, name, data: { questions, loading } }) => {
 };
 
 Home.propTypes = {
-  getQuestions: PropTypes.func.isRequired,
+  getCategoryQuestions: PropTypes.func.isRequired,
+  setQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
   unsaveQuestion: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
@@ -120,12 +144,13 @@ Home.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  name: state.user.credentials.name,
+  user: state.user,
   data: state.data,
 });
 
 const mapActionsToProps = {
-  getQuestions,
+  getCategoryQuestions,
+  setQuestion,
   saveQuestion,
   unsaveQuestion,
 };
@@ -140,6 +165,16 @@ const PopupContainer = styled.div`
   }
 `;
 
+const StarButton = styled.img.attrs({
+  alt: 'save/ unsave question',
+})`
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 24px;
+  cursor: pointer;
+`;
+
 const spin = (rotation) => keyframes`
   0% {
     transform : translate(-50%, -50%) rotate(0deg);
@@ -150,7 +185,9 @@ const spin = (rotation) => keyframes`
   }
 `;
 
-const Wheel = styled.img`
+const Wheel = styled.img.attrs({
+  alt: 'spin wheel',
+})`
   border-radius: 50%;
   transform-origin: center;
   ${(props) =>

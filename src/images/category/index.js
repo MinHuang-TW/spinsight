@@ -1,8 +1,50 @@
-export { default as appearance } from './appearance.png';
-export { default as belongings } from './belongings.png';
-export { default as character } from './character.png';
-export { default as life } from './life.png';
-export { default as limited } from './limited.png';
-export { default as permanent } from './permanent.png';
-export { default as warning } from './warning.png';
-export { default as OK } from './OK.png';
+import appearance from './appearance.png';
+import belongings from './belongings.png';
+import character from './character.png';
+import life from './life.png';
+import limited from './limited.png';
+import permanent from './permanent.png';
+import warning from './warning.png';
+import OK from './OK.png';
+
+export const fetchIcon = (category) => {
+  switch (category) {
+    case 'appearance':
+      return appearance;
+    case 'belongings':
+      return belongings;
+    case 'character':
+      return character;
+    case 'life':
+      return life;
+    case 'limited':
+      return limited;
+    case 'permanent':
+      return permanent;
+    case 'OK':
+      return OK;
+    case 'warning':
+      return warning;
+
+    default:
+      break;
+  }
+};
+
+export const fetchCategory = (randomNumber) => {
+  switch (randomNumber) {
+    case 0:
+      return 'appearance';
+    case 1:
+      return 'limited';
+    case 2:
+      return 'character';
+    case 3:
+      return 'life';
+    default:
+    case 4:
+      return 'permanent';
+    case 5:
+      return 'belongings';
+  }
+};

@@ -1,53 +1,18 @@
 import React from 'react';
 import Modal from '../elements/Modal';
-import {
-  appearance,
-  belongings,
-  character,
-  life,
-  limited,
-  permanent,
-  warning,
-  OK,
-} from '../images/category';
+import { fetchIcon } from '../images/category';
 import styled from 'styled-components';
 
-const Popup = ({ category, children, handleCancel, open }) => {
-  const fetchIcon = (category) => {
-    switch (category) {
-      case 'appearance':
-        return appearance;
-      case 'belongings':
-        return belongings;
-      case 'character':
-        return character;
-      case 'life':
-        return life;
-      case 'limited':
-        return limited;
-      case 'permanent':
-        return permanent;
-      case 'OK':
-        return OK;
-      case 'warning':
-        return warning;
-
-      default:
-        break;
-    }
-  };
-
-  return (
-    <Container open={open} onClick={handleCancel}>
-      <PopupModal open={open}>
-        <Icon>
-          <img src={fetchIcon(category)} alt='icon' />
-        </Icon>
-        {children}
-      </PopupModal>
-    </Container>
-  );
-};
+const Popup = ({ category, children, handleCancel, open }) => (
+  <Container open={open} onClick={handleCancel}>
+    <PopupModal open={open}>
+      <Icon>
+        <img src={fetchIcon(category)} alt='icon' />
+      </Icon>
+      {children}
+    </PopupModal>
+  </Container>
+);
 
 export default Popup;
 
