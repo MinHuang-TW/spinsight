@@ -96,7 +96,10 @@ const AddQuestion = ({
 
 AddQuestion.propTypes = {
   postQuestion: PropTypes.func.isRequired,
+<<<<<<< HEAD
   clearErrors: PropTypes.func.isRequired,
+=======
+>>>>>>> c9d7e14c99eaac45b842fb2103073fa707589b68
   UI: PropTypes.object.isRequired,
   name: PropTypes.string,
 };
@@ -106,12 +109,16 @@ const mapStateToProps = (state) => ({
   UI: state.UI,
 });
 
+<<<<<<< HEAD
 const mapActionsToProps = {
   postQuestion,
   clearErrors,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(AddQuestion);
+=======
+export default connect(mapStateToProps, { postQuestion })(AddQuestion);
+>>>>>>> c9d7e14c99eaac45b842fb2103073fa707589b68
 
 const Container = styled.section`
   width: 75%;
