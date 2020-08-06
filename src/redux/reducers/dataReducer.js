@@ -32,18 +32,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         question: action.payload,
-        loading: false,
+        // loading: false,
       };
 
     case SAVE_QUESTION:
     case UNSAVE_QUESTION:
-      let index = state.questions.findIndex(
-        (question) => question.questionId === action.payload.questionId
-      );
-      state.questions[index] = action.payload;
-      // if (state.question.questionId === action.payload.questionId) {
-      //   state.question = actions.payload;
-      // }
+      // let index = state.questions.findIndex(
+      //   (question) => question.questionId === action.payload.questionId
+      // );
+      // state.questions[index] = action.payload;
+      if (state.question.questionId === action.payload.questionId) {
+        state.question = action.payload;
+      }
       return {
         ...state,
       };

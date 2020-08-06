@@ -31,13 +31,13 @@ export const getCategoryQuestions = (category) => (dispatch) => {
 };
 
 export const setQuestion = (question) => (dispatch) => {
-  dispatch({ type: LOADING_DATA });
-
   dispatch({
     type: SET_QUESTION,
     payload: question,
   });
   // #region
+  // dispatch({ type: LOADING_DATA });
+
   // axios
   //   .get(`question/${category}/${questionId}`)
   //   .then((res) => {

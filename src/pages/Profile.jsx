@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/actions/userActions';
+import { categories, fetchIcon, count } from '../util/functions';
+
 import Layout from '../components/Layout';
 import LightBulb from '../components/LightBlub';
 import RadioButton from '../elements/RadioButton';
@@ -9,37 +11,42 @@ import Button from '../elements/Button';
 import Progress from '../components/Progress';
 import Line from '../elements/Divider';
 import CancelIcon from '../images/cancelIcon.png';
-import { fetchIcon } from '../images/category';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const CategoryBlock = ({ answers, name }) => {
-  const count = answers.filter(({ category }) => category === name).length;
-  return (
-    <CategoryContainer count={count} color={name}>
-      <img src={fetchIcon(name)} alt={name} />
-      <p>{count}</p>
-    </CategoryContainer>
-  );
-};
+const Block = ({ text, data, types }) => (
+  <>
+    <Divider>
+      <p>
+        {data.length} {text}
+        {data.length > 0 ? 's' : ''}
+      </p>
+      <Line />
+    </Divider>
+
+    <Grid>
+      {types.map((type) => {
+        const dataCount = count(data, type);
+        return (
+          <CategoryContainer key={type} color={type} count={dataCount}>
+            <img src={fetchIcon(type)} alt={type} />
+            <p>{dataCount}</p>
+          </CategoryContainer>
+        );
+      })}
+    </Grid>
+  </>
+);
 
 const Profile = ({
   logoutUser,
   user: {
     credentials: { name, image },
+    saves,
     answers,
     loading,
   },
 }) => {
-  const categories = [
-    'appearance',
-    'belongings',
-    'character',
-    'life',
-    'permanent',
-    'limited',
-  ];
-
   const handleLogout = useCallback(() => {
     logoutUser();
   }, [logoutUser]);
@@ -49,28 +56,11 @@ const Profile = ({
       {!loading ? (
         <Container>
           <LightBulb answers={answers} />
-          {image ? (
-            <img width={100} src={image} alt='avatar' />
-          ) : (
-            <div style={{ height: 100 }} />
-          )}
+          <Avatar src={image} />
           <Title>{name}</Title>
 
-          <Divider>
-            <p>{`${answers.length} Answer${answers.length > 0 ? 's' : ''}`}</p>
-            <Line />
-          </Divider>
-
-          <Grid>
-            {categories.map((category) => (
-              <CategoryBlock key={category} name={category} answers={answers} />
-            ))}
-          </Grid>
-
-          <Divider>
-            <p>Questions</p>
-            <Line />
-          </Divider>
+          <Block types={categories} text='Answer' data={answers} />
+          <Block types={categories} text='Saved Question' data={saves} />
 
           <LogoutButton onClick={handleLogout}>log out</LogoutButton>
 
@@ -113,15 +103,22 @@ const Container = styled.div`
   }
 `;
 
+const Avatar = styled.img.attrs({
+  alt: 'avatar',
+})`
+  width: 100px;
+  margin: 1rem auto 0;
+`;
+
 const Title = styled.h1`
   font-size: 1.5rem;
-  margin: 1rem auto 0;
+  margin: 0 auto 1.5rem;
   color: ${(props) => props.theme.strong};
   opacity: 1;
 `;
 
 const Grid = styled.div`
-  margin: auto;
+  margin: 2rem auto;
   width: 70%;
   display: grid;
   grid-template-columns: repeat(3, auto);
@@ -130,8 +127,8 @@ const Grid = styled.div`
 
 const Divider = styled.div`
   height: 1.5rem;
-  margin: 2rem auto;
   position: relative;
+  /* margin: 2rem auto; */
 
   ${Line},
   p {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../elements/Modal';
-import { fetchIcon } from '../images/category';
+import { fetchIcon } from '../util/functions';
 import styled from 'styled-components';
 
 const Popup = ({ category, children, handleCancel, open }) => (

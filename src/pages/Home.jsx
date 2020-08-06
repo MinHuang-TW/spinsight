@@ -7,16 +7,19 @@ import {
   saveQuestion,
   unsaveQuestion,
 } from '../redux/actions/dataActions';
-import { fetchCategory } from '../images/category';
+import { randomize, getRotation, fetchCategory } from '../util/functions';
+
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
-import Star from '../images/star.png';
-import Unstar from '../images/unstar.png';
-import Progress from '../components/Progress';
+// import Progress from '../components/Progress';
+
 import Input from '../elements/Input.js';
 import Button from '../elements/Button';
 import RadioButton from '../elements/RadioButton';
+
+import Star from '../images/star.png';
+import Unstar from '../images/unstar.png';
 import SpinWheel from '../images/spinWheel.png';
 import Pointer from '../images/pointer.png';
 import styled, { css, keyframes } from 'styled-components';
@@ -37,7 +40,6 @@ const Home = ({
   const [clicked, setClicked] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const randomize = (number) => Math.floor(Math.random() * number);
 
   const isSaved = useCallback(() => {
     if (
@@ -73,13 +75,11 @@ const Home = ({
 
   const handleSpin = useCallback(() => {
     setClicked(true);
-
     const randomNumber = randomize(6); // return 0 - 5
     const randomCategory = fetchCategory(randomNumber);
+    const randomRotation = getRotation(randomNumber);
     setCategory(randomCategory);
-
-    const getRotation = (number) => 2160 + number * 60;
-    setRotation(getRotation(randomNumber));
+    setRotation(randomRotation);
   }, []);
 
   const handleSpinEnd = useCallback(() => {
@@ -88,9 +88,11 @@ const Home = ({
     const resultQuestion = questions[index];
     setQuestion(resultQuestion);
 
-    setShowPopup(true);
-    setClicked(false);
-  }, [questions, setQuestion]);
+    if (!loading) {
+      setShowPopup(true);
+      setClicked(false);
+    }
+  }, [questions, setQuestion, loading]);
 
   useEffect(() => {
     if (!category) return;
@@ -99,8 +101,6 @@ const Home = ({
 
   return (
     <Layout>
-      <h1>Hello, {name} !</h1>
-
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
         <PopupContainer>
           {SaveButton}
@@ -117,6 +117,7 @@ const Home = ({
         </PopupContainer>
       </Popup>
 
+      <h1>Hello, {name} !</h1>
       <WheelContainer>
         <RadioButton border onClick={handleSpin}>
           Get a Question

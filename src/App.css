@@ -50,6 +50,7 @@ input::placeholder,
 textarea::-webkit-input-placeholder,
 input::-webkit-input-placeholder {
   opacity: 0.3;
+  text-transform: capitalize;
 }
 textarea:-ms-input-placeholder,
 input:-ms-input-placeholder {

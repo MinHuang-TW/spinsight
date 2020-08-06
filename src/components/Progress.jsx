@@ -28,7 +28,7 @@ export default Progress;
 
 const Container = styled.section`
   position: absolute;
-  width: 100%;
+  width: 100vw;
   height: ${(props) =>
     props.login ? 'calc(100vh - 6.5rem)' : 'calc(100vh - 0.5rem)'};
   background: rgba(240, 241, 241, 0.8);

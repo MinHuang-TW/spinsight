@@ -2,8 +2,11 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { signupUser } from '../redux/actions/userActions';
+import { signupUser, clearErrors } from '../redux/actions/userActions';
+
 import Layout from '../components/Layout';
+import Progress from '../components/Progress';
+import Alert from '../elements/Alert';
 import Input from '../elements/Input';
 import Modal from '../elements/Modal';
 import Button from '../elements/Button';
@@ -12,25 +15,35 @@ import AddIcon from '../images/addIcon.png';
 import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
 
-const Signup = ({ signupUser, history, UI: { loading, errors } }) => {
+const Signup = ({
+  signupUser,
+  clearErrors,
+  history,
+  UI: { loading, errors },
+}) => {
   const [image, setImage] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState({});
   const [isOpen, setIsOpen] = useState(false);
 
+  const inputTypes = [
+    { name: 'name', type: 'text', value: name },
+    { name: 'email', type: 'email', value: email },
+    { name: 'password', type: 'password', value: password },
+    { name: 'confirmPassword', type: 'password', value: confirmPassword },
+  ];
+
   const validation =
-    name === '' || email === '' || password === '' || confirmPassword === '';
+    name.trim() === '' ||
+    email.trim() === '' ||
+    password.trim() === '' ||
+    confirmPassword.trim() === '';
 
   const handleOpen = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+    setIsOpen(!isOpen);
+  }, [isOpen]);
 
   const handleImage = useCallback(
     (avatar) => () => {
@@ -70,14 +83,13 @@ const Signup = ({ signupUser, history, UI: { loading, errors } }) => {
   );
 
   return (
-    <Layout width='62%' margin='5rem auto 0'>
+    <Layout width='62%'>
+      {loading && <Progress />}
+      {errors && <Alert>{Object.values(errors)}</Alert>}
+
       <AddContainer>
         <AddButton avatar={image} onClick={handleOpen}>
-          <img
-            width={image ? '100%' : 32}
-            src={image || AddIcon}
-            alt='add icon'
-          />
+          <SelectedAvatar src={image || AddIcon} image={image} />
         </AddButton>
         <Text>{image ? 'change' : 'choose'} your Avatar</Text>
       </AddContainer>
@@ -106,48 +118,26 @@ const Signup = ({ signupUser, history, UI: { loading, errors } }) => {
             />
           ))}
         </Grid>
-        <Button disabled={!image} onClick={handleClose}>
+        <Button disabled={!image} onClick={handleOpen}>
           Confirm
         </Button>
       </AvatarModal>
 
       <SignupForm id='signupForm' onSubmit={handleSubmit}>
-        <Input
-          name='name'
-          type='text'
-          label='Name'
-          placeholder='Name'
-          value={name}
-          onChange={handleChange}
-        />
-        <Input
-          name='email'
-          type='email'
-          label='Email'
-          placeholder='email'
-          value={email}
-          onChange={handleChange}
-        />
-        <Input
-          name='password'
-          type='password'
-          label='Password'
-          value={password}
-          placeholder='Password'
-          onChange={handleChange}
-        />
-        <Input
-          name='confirmPassword'
-          type='password'
-          label='ConfirmPassword'
-          value={confirmPassword}
-          placeholder='Confirm Password'
-          onChange={handleChange}
-        />
+        {inputTypes.map((type) => (
+          <SignupInput
+            key={type.name}
+            label={type.name}
+            placeholder={type.name}
+            onChange={handleChange}
+            error={errors && Object.keys(errors).toString() === type.name}
+            {...type}
+          />
+        ))}
       </SignupForm>
 
       <Link to='/login'>
-        <Button fullWidth gutterBottom>
+        <Button fullWidth gutterBottom onClick={clearErrors}>
           Log in
         </Button>
       </Link>
@@ -158,6 +148,7 @@ const Signup = ({ signupUser, history, UI: { loading, errors } }) => {
 
 Signup.propTypes = {
   signupUser: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired,
 };
@@ -167,11 +158,23 @@ const mapStateToProps = (state) => ({
   UI: state.UI,
 });
 
-export default connect(mapStateToProps, { signupUser })(Signup);
+const mapActionsToProps = {
+  signupUser,
+  clearErrors,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Signup);
+
+const SelectedAvatar = styled.img.attrs({
+  alt: 'add icon',
+})`
+  width: ${(props) => (props.image ? '100%' : '32px')};
+`;
 
 const AvatarModal = styled(Modal)`
   bottom: 0px;
-  padding-top: 0;
+  margin-top: 5rem;
+  padding-top: 7rem;
   top: ${(props) => (props.open ? '3rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
   -webkit-transform: translate(-50%, 0%);
@@ -193,6 +196,7 @@ const AddContainer = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 10;
+  margin-top: 5rem;
   a {
     width: 100%;
   }
@@ -223,6 +227,10 @@ const SignupForm = styled.form`
   justify-content: center;
 `;
 
+const SignupInput = styled(Input)`
+  border-color: ${(props) => props.error && props.theme.appearance};
+`;
+
 const Grid = styled.div`
   width: 100%;
   display: grid;
@@ -231,9 +239,6 @@ const Grid = styled.div`
   grid-template-columns: repeat(4, auto);
   grid-template-rows: 1fr 1fr;
   gap: 1rem;
-  &:first-of-type {
-    margin-top: 7rem;
-  }
 `;
 
 const Avatar = styled.img`
