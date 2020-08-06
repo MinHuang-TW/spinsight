@@ -38,5 +38,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://europe-west1-spinsight-api.cloudfunctions.net/api"
+  "proxy": "https://europe-west1-spinsight-api.cloudfunctions.net"
 }

@@ -15,7 +15,7 @@ export const getCategoryQuestions = (category) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
 
   axios
-    .get(`questions/${category}`)
+    .get(`/api/questions/${category}`)
     .then((res) => {
       dispatch({
         type: SET_QUESTIONS,
@@ -59,7 +59,7 @@ export const postQuestion = (newQuestion) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post('/question', newQuestion)
+    .post('/api/question', newQuestion)
     .then((res) => {
       dispatch({
         type: POST_QUESTION,
@@ -77,7 +77,7 @@ export const postQuestion = (newQuestion) => (dispatch) => {
 
 export const saveQuestion = (category, questionId) => (dispatch) => {
   axios
-    .get(`question/${category}/${questionId}/save`)
+    .get(`/api/question/${category}/${questionId}/save`)
     .then((res) => {
       dispatch({
         type: SAVE_QUESTION,
@@ -89,7 +89,7 @@ export const saveQuestion = (category, questionId) => (dispatch) => {
 
 export const unsaveQuestion = (category, questionId) => (dispatch) => {
   axios
-    .get(`question/${category}/${questionId}/unsave`)
+    .get(`/api/question/${category}/${questionId}/unsave`)
     .then((res) => {
       dispatch({
         type: UNSAVE_QUESTION,
