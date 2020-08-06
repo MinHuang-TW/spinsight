@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import RadioButton from '../elements/RadioButton';
@@ -12,28 +12,32 @@ const Navbar = ({
   user: {
     credentials: { image },
   },
-}) => (
-  <Container>
-    {homepage ? (
-      <Link to='/addQuestion'>
-        <RadioButton border aria-label='add question'>
-          <img width={25} src={AddIcon} alt='add new question' />
+}) => {
+  if (!localStorage.FBIdToken) return <Redirect to='/signup' />;
+
+  return (
+    <Container>
+      {homepage ? (
+        <Link to='/addQuestion'>
+          <RadioButton border aria-label='add question'>
+            <img width={25} src={AddIcon} alt='add new question' />
+          </RadioButton>
+        </Link>
+      ) : (
+        <Link to='/'>
+          <RadioButton border aria-label='home'>
+            <img width={25} src={HomeIcon} alt='home icon' />
+          </RadioButton>
+        </Link>
+      )}
+      <Link to='/profile'>
+        <RadioButton aria-label='profile'>
+          <img width={56} src={image} alt='avatar' />
         </RadioButton>
       </Link>
-    ) : (
-      <Link to='/'>
-        <RadioButton border aria-label='home'>
-          <img width={25} src={HomeIcon} alt='home icon' />
-        </RadioButton>
-      </Link>
-    )}
-    <Link to='/profile'>
-      <RadioButton aria-label='profile'>
-        <img width={56} src={image} alt='avatar' />
-      </RadioButton>
-    </Link>
-  </Container>
-);
+    </Container>
+  );
+};
 
 const mapStateToProps = (state) => ({
   user: state.user,

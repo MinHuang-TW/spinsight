@@ -10,7 +10,7 @@ import Progress from '../components/Progress';
 import Button from '../elements/Button';
 import styled from 'styled-components';
 
-const AddQuestion = ({
+const Question = ({
   postQuestion,
   clearErrors,
   name,
@@ -94,7 +94,7 @@ const AddQuestion = ({
   );
 };
 
-AddQuestion.propTypes = {
+Question.propTypes = {
   postQuestion: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
   UI: PropTypes.object.isRequired,
@@ -111,7 +111,7 @@ const mapActionsToProps = {
   clearErrors,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(AddQuestion);
+export default connect(mapStateToProps, mapActionsToProps)(Question);
 
 const Container = styled.section`
   width: 75%;

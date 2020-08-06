@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/actions/userActions';
 import { categories, fetchIcon, count } from '../util/functions';
@@ -50,6 +50,8 @@ const Profile = ({
   const handleLogout = useCallback(() => {
     logoutUser();
   }, [logoutUser]);
+
+  if (!localStorage.FBIdToken) return <Redirect to='login' />;
 
   return (
     <Layout>
