@@ -6,6 +6,8 @@ import {
   setQuestion,
   saveQuestion,
   unsaveQuestion,
+  submitAnswer,
+  clearErrors,
 } from '../redux/actions/dataActions';
 import { randomize, getRotation, fetchCategory } from '../util/functions';
 
@@ -29,11 +31,13 @@ const Home = ({
   setQuestion,
   saveQuestion,
   unsaveQuestion,
+  submitAnswer,
   user: {
     credentials: { name },
     saves,
   },
   data: { questions, question, loading },
+  UI,
 }) => {
   const [category, setCategory] = useState(null);
   const [answer, setAnswer] = useState('');
@@ -73,6 +77,16 @@ const Home = ({
     setShowPopup(false);
   }, []);
 
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      const { questionId } = question;
+      submitAnswer(category, questionId, { answer });
+      // if (!UI.errors && !UI.loading) setShowPopup(false);
+    },
+    [category, question, answer, submitAnswer]
+  );
+
   const handleSpin = useCallback(() => {
     setClicked(true);
     const randomNumber = randomize(6); // return 0 - 5
@@ -83,26 +97,27 @@ const Home = ({
   }, []);
 
   const handleSpinEnd = useCallback(() => {
-    if (!questions.length) return;
-    const index = randomize(questions.length);
-    const resultQuestion = questions[index];
-    setQuestion(resultQuestion);
-
-    if (!loading) {
-      setShowPopup(true);
-      setClicked(false);
-    }
-  }, [questions, setQuestion, loading]);
+    if (loading) return;
+    setShowPopup(true);
+    setClicked(false);
+  }, [loading]);
 
   useEffect(() => {
     if (!category) return;
     getCategoryQuestions(category);
   }, [category, getCategoryQuestions]);
 
+  useEffect(() => {
+    if (questions.length === 0) return;
+    const index = randomize(questions.length);
+    const resultQuestion = questions[index];
+    setQuestion(resultQuestion);
+  }, [questions, setQuestion]);
+
   return (
     <Layout>
       <Popup category={category} open={showPopup} handleCancel={handleCancel}>
-        <PopupContainer>
+        <PopupForm onSubmit={handleSubmit}>
           {SaveButton}
           <h2>{question.question}</h2>
           <Input
@@ -113,8 +128,14 @@ const Home = ({
             value={answer}
             onChange={handleChange}
           />
-          <Button disabled={answer.trim() === ''}>Submit</Button>
-        </PopupContainer>
+          <Button
+            type='submit'
+            form='questionForm'
+            disabled={answer.trim() === ''}
+          >
+            Submit
+          </Button>
+        </PopupForm>
       </Popup>
 
       <h1>Hello, {name} !</h1>
@@ -142,13 +163,16 @@ Home.propTypes = {
   setQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
   unsaveQuestion: PropTypes.func.isRequired,
+  submitAnswer: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.user,
   data: state.data,
+  UI: state.UI,
 });
 
 const mapActionsToProps = {
@@ -156,11 +180,14 @@ const mapActionsToProps = {
   setQuestion,
   saveQuestion,
   unsaveQuestion,
+  submitAnswer,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Home);
 
-const PopupContainer = styled.div`
+const PopupForm = styled.form.attrs({
+  id: 'questionForm',
+})`
   width: 70%;
   margin: 3rem auto;
   ${Input} {

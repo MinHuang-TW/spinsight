@@ -123,7 +123,7 @@ const Signup = ({
         </Button>
       </AvatarModal>
 
-      <SignupForm id='signupForm' onSubmit={handleSubmit}>
+      <SignupForm onSubmit={handleSubmit}>
         {inputTypes.map((type) => (
           <SignupInput
             key={type.name}
@@ -219,7 +219,9 @@ const AddButton = styled.button`
   box-sizing: border-box;
 `;
 
-const SignupForm = styled.form`
+const SignupForm = styled.form.attrs({
+  id: 'signupForm',
+})`
   height: 100%;
   width: 100%;
   display: flex;

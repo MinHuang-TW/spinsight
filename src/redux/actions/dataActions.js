@@ -1,11 +1,13 @@
 import {
   LOADING_UI,
+  // STOP_LOADING_UI,
   LOADING_DATA,
   SET_QUESTIONS,
   SET_QUESTION,
   POST_QUESTION,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
+  SUBMIT_ANSWER,
   SET_ERRORS,
   CLEAR_ERRORS,
 } from '../types';
@@ -35,24 +37,20 @@ export const setQuestion = (question) => (dispatch) => {
     type: SET_QUESTION,
     payload: question,
   });
-  // #region
-  // dispatch({ type: LOADING_DATA });
+  // dispatch({ type: LOADING_UI });
 
   // axios
-  //   .get(`question/${category}/${questionId}`)
+  //   .get(
+  //     `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}`
+  //   )
   //   .then((res) => {
   //     dispatch({
   //       type: SET_QUESTION,
   //       payload: res.data,
   //     });
+  //     dispatch({ type: STOP_LOADING_UI });
   //   })
-  //   .catch((err) => {
-  //     dispatch({
-  //       type: SET_QUESTION,
-  //       payload: [],
-  //     });
-  //   });
-  //#endregion
+  //   .catch((err) => console.log(err));
 };
 
 export const postQuestion = (newQuestion) => (dispatch) => {
@@ -65,7 +63,7 @@ export const postQuestion = (newQuestion) => (dispatch) => {
         type: POST_QUESTION,
         payload: res.data,
       });
-      dispatch({ type: CLEAR_ERRORS });
+      dispatch(clearErrors());
     })
     .catch((err) => {
       dispatch({
@@ -77,7 +75,9 @@ export const postQuestion = (newQuestion) => (dispatch) => {
 
 export const saveQuestion = (category, questionId) => (dispatch) => {
   axios
-    .get(`/api/question/${category}/${questionId}/save`)
+    .get(
+      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/save`
+    )
     .then((res) => {
       dispatch({
         type: SAVE_QUESTION,
@@ -99,6 +99,28 @@ export const unsaveQuestion = (category, questionId) => (dispatch) => {
       });
     })
     .catch((err) => console.log(err));
+};
+
+export const submitAnswer = (category, questionId, answer) => (dispatch) => {
+  axios
+    .post(
+      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/answer`,
+      answer
+    )
+    .then((res) => {
+      dispatch({
+        type: SUBMIT_ANSWER,
+        payload: res.data,
+      });
+      dispatch(clearErrors());
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 export const clearErrors = () => (dispatch) => {

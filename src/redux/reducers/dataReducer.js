@@ -3,6 +3,7 @@ import {
   SET_QUESTIONS,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
+  SUBMIT_ANSWER,
   POST_QUESTION,
   LOADING_DATA,
 } from '../types';
@@ -32,7 +33,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         question: action.payload,
-        // loading: false,
       };
 
     case SAVE_QUESTION:
@@ -52,6 +52,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: [action.payload, ...state.questions],
+      };
+
+    case SUBMIT_ANSWER:
+      return {
+        ...state,
+        question: {
+          ...state.question,
+          // TODO:
+          answers: [action.payload],
+        },
       };
 
     default:
