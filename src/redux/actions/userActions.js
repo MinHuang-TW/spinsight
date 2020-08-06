@@ -12,7 +12,7 @@ export const loginUser = (userData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post('/api/login', userData)
+    .post(`${process.env.REACT_APP_ENDPOINT}/api/login`, userData)
     .then((res) => {
       setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
@@ -31,7 +31,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post('/api/signup', newUserData)
+    .post(`${process.env.REACT_APP_ENDPOINT}/api/signup`, newUserData)
     .then((res) => {
       setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
@@ -57,7 +57,7 @@ export const getUserData = () => (dispatch) => {
   dispatch({ type: LOADING_USER });
 
   axios
-    .get('/api/user')
+    .get(`${process.env.REACT_APP_ENDPOINT}/api/user`)
     .then((res) => {
       dispatch({
         type: SET_USER,

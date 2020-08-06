@@ -13,7 +13,7 @@ const Navbar = ({
     credentials: { image },
   },
 }) => {
-  if (!localStorage.FBIdToken) return <Redirect to='/signup' />;
+  if (!localStorage.FBIdToken) return <Redirect to='/login' />;
 
   return (
     <Container>

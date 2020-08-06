@@ -51,7 +51,7 @@ const Profile = ({
     logoutUser();
   }, [logoutUser]);
 
-  if (!localStorage.FBIdToken) return <Redirect to='login' />;
+  if (!localStorage.FBIdToken) return <Redirect to='/login' />;
 
   return (
     <Layout>

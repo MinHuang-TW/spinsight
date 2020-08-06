@@ -1,5 +1,4 @@
 [[redirects]]
-  from = "/api"
-  to = "https://europe-west1-spinsight-api.cloudfunctions.net"
+  from = "/*"
+  to = "/login.html"
   status = 200
-  force = true
