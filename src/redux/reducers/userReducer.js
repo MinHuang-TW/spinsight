@@ -1,10 +1,11 @@
 import {
+  LOADING_USER,
   SET_USER,
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
-  LOADING_USER,
   SAVE_QUESTION,
   UNSAVE_QUESTION,
+  SUBMIT_ANSWER,
 } from '../types';
 
 const initialState = {
@@ -58,6 +59,12 @@ export default function (state = initialState, action) {
         saves: state.saves.filter(
           (save) => save.questionId !== action.payload.questionId
         ),
+      };
+
+    case SUBMIT_ANSWER:
+      return {
+        ...state,
+        answers: [...state.answers, action.payload],
       };
 
     default:

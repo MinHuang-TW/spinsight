@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserData, logoutUser } from '../redux/actions/userActions';
+import { logoutUser } from '../redux/actions/userActions';
 import { categories, fetchIcon, count } from '../util/functions';
 
 import Layout from '../components/Layout';
@@ -39,7 +39,6 @@ const Block = ({ text, data, types }) => (
 );
 
 const Profile = ({
-  getUserData,
   logoutUser,
   user: {
     credentials: { name, image },
@@ -51,10 +50,6 @@ const Profile = ({
   const handleLogout = useCallback(() => {
     logoutUser();
   }, [logoutUser]);
-
-  useEffect(() => {
-    getUserData();
-  }, [getUserData]);
 
   if (!localStorage.FBIdToken) return <Redirect to='/login' />;
 
@@ -85,7 +80,6 @@ const Profile = ({
 };
 
 Profile.propTypes = {
-  getUserData: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
@@ -94,7 +88,7 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { getUserData, logoutUser })(Profile);
+export default connect(mapStateToProps, { logoutUser })(Profile);
 
 const Container = styled.div`
   background: white;
