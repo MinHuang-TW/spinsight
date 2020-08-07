@@ -24,6 +24,7 @@ import Star from '../images/star.png';
 import Unstar from '../images/unstar.png';
 import SpinWheel from '../images/spinWheel.png';
 import Pointer from '../images/pointer.png';
+import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled, { css, keyframes } from 'styled-components';
 
 const Home = ({
@@ -33,10 +34,7 @@ const Home = ({
   unsaveQuestion,
   submitAnswer,
   clearErrors,
-  user: {
-    credentials: { name },
-    saves,
-  },
+  user: { credentials: { name }, saves },
   data: { questions, question },
   UI: { errors, loading },
 }) => {
@@ -46,6 +44,8 @@ const Home = ({
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [submited, setSubmited] = useState(false);
+  const avatars = [...WomenAvatars, ...MenAvatars];
+  const avatarCount = avatars.length;
 
   const isSaved = useCallback(() => {
     if (
@@ -68,37 +68,25 @@ const Home = ({
     setAnswer(input.value);
   }, []);
 
-  const SaveButton = isSaved() ? (
-    <StarButton src={Star} onClick={handleUnsave} />
-  ) : (
-    <StarButton src={Unstar} onClick={handleSave} />
-  );
+  const handleCancel = useCallback(({ target }) => {
+    if (target.tagName !== 'SECTION') return;
+    if (!loading) setShowPopup(false);
+    if (errors) clearErrors();
+  }, [errors, clearErrors, loading]);
 
-  const handleCancel = useCallback(
-    ({ target }) => {
-      if (target.tagName !== 'SECTION') return;
-      if (!loading) setShowPopup(false);
-      if (errors) clearErrors();
-    },
-    [errors, clearErrors, loading]
-  );
+  const handleSubmit = useCallback((event) => {
+    event.preventDefault();
+    if (!category || !Object.keys(question).length) return;
 
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      if (!category || !Object.keys(question).length) return;
+    const { questionId } = question;
+    submitAnswer(category, questionId, { answer });
 
-      const { questionId } = question;
-      submitAnswer(category, questionId, { answer });
-
-      if (!loading && !errors) {
-        setAnswer('');
-        setSubmited(true);
-        setCategory(null);
-      }
-    },
-    [category, question, answer, submitAnswer, loading, errors]
-  );
+    if (!loading && !errors) {
+      setAnswer('');
+      setSubmited(true);
+      setCategory(null);
+    }
+  }, [category, question, answer, submitAnswer, loading, errors]);
 
   const handleSpin = useCallback(() => {
     setSubmited(false);
@@ -114,6 +102,7 @@ const Home = ({
   const handleSpinEnd = useCallback(() => {
     setClicked(false);
     if (Object.keys(question).length) setShowPopup(true);
+    else alert('please spin again 🙇🏻');
   }, [question]);
 
   useEffect(() => {
@@ -126,9 +115,38 @@ const Home = ({
       const index = randomize(questions.length);
       const randomId = questions[index].questionId;
       setQuestion(category, randomId);
-    }
-  }, [questions, setQuestion]); // eslint-disable-line
+    } // eslint-disable-next-line
+  }, [questions, setQuestion]);
 
+  const PopupContent = !submited ? (
+    <>
+      {isSaved() ? (
+        <StarButton src={Star} onClick={handleUnsave} />
+      ) : (
+        <StarButton src={Unstar} onClick={handleSave} />
+      )}
+      <h2>{question.question}</h2>
+      <AnswerInput value={answer} onChange={handleChange} />
+      <Button type='submit' form='questionForm' disabled={answer.trim() === ''}>
+        Submit
+      </Button>
+    </>
+  ) : (
+    <>
+      <h2>All Answers</h2>
+      <AnswerList>
+        {question.answers.map(({ answer }) => {
+          const idx = randomize(avatarCount);
+          return (
+            <li key={answer}>
+              <img src={avatars[idx]} alt='avatar' />
+              <p>{answer}</p>
+            </li>
+          );
+        })}
+      </AnswerList>
+    </>
+  );
   return (
     <Layout>
       <Popup
@@ -137,35 +155,7 @@ const Home = ({
         handleCancel={handleCancel}
       >
         <PopupForm onSubmit={handleSubmit}>
-          {loading ? (
-            <Progress nobg />
-          ) : !submited ? (
-            <>
-              {SaveButton}
-              <h2>{question.question}</h2>
-              <Input
-                type='text'
-                name='answer'
-                label='Answer'
-                placeholder='Answer'
-                value={answer}
-                onChange={handleChange}
-              />
-              <Button
-                type='submit'
-                form='questionForm'
-                disabled={answer.trim() === ''}
-              >
-                Submit
-              </Button>
-            </>
-          ) : (
-            <ul>
-              {question.answers.map(({ answer }) => (
-                <li key={answer}>{answer}</li>
-              ))}
-            </ul>
-          )}
+          {loading ? <Progress nobg /> : PopupContent}
         </PopupForm>
       </Popup>
 
@@ -228,6 +218,48 @@ const PopupForm = styled.form.attrs({
   }
 `;
 
+const AnswerInput = styled.input.attrs({
+  type: 'text',
+  name: 'answer',
+  label: 'Answer',
+  placeholder: 'Answer',
+})`
+  height: ${(props) => props.height && props.height};
+  color: ${(props) => props.theme.secondary};
+  margin: 2.5rem auto;
+
+  &:-webkit-autofill {
+    -webkit-text-fill-color: ${(props) => props.theme.secondary} !important;
+  }
+
+  &:focus {
+    border-color: ${(props) => props.theme.primary};
+  }
+`;
+
+const AnswerList = styled.ul`
+  padding: 0px;
+
+  li {
+    list-style-type: none;
+    height: 5rem;
+    line-height: 5rem;
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid rgba(155, 155, 155, 0.5);
+  }
+
+  img {
+    width: 2.5rem;
+    margin: auto 2rem auto 1rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+    color: ${(props) => props.theme.strong};
+  }
+`;
+
 const StarButton = styled.img.attrs({
   alt: 'save/ unsave question',
 })`
@@ -264,7 +296,7 @@ const Wheel = styled.img.attrs({
 const WheelContainer = styled.div`
   position: relative;
   width: 90%;
-  height: 100%;
+  height: auto;
 
   img,
   button {

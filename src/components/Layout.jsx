@@ -28,7 +28,7 @@ const Main = styled.main`
   position: relative;
   margin: ${(props) => props.margin || 'auto'};
   width: ${(props) => props.width || '100%'};
-  max-width: 600px;
+  max-width: 548px;
   height: 100%;
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
   display: -ms-flexbox; /* TWEENER - IE 10 */

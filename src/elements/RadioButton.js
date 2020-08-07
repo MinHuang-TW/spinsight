@@ -23,5 +23,8 @@ export default styled.button`
     border: 2px solid #9b9b9b;
     opacity: ${(props) => (props.border ? 0.3 : 0)};
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `;

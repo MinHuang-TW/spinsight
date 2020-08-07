@@ -60,21 +60,23 @@ const Login = ({
         />
       </LoginForm>
 
-      <Button
-        type='submit'
-        form='loginForm'
-        fullWidth
-        gutterBottom
-        disabled={email.trim() === '' || password.trim() === ''}
-      >
-        Log in
-      </Button>
-
-      <Link to='/signup'>
-        <Button onClick={clearErrors} fullWidth>
-          sign up
+      <div>
+        <Button
+          type='submit'
+          form='loginForm'
+          fullWidth
+          gutterBottom
+          disabled={email.trim() === '' || password.trim() === ''}
+        >
+          Log in
         </Button>
-      </Link>
+
+        <Link to='/signup'>
+          <Button onClick={clearErrors} fullWidth>
+            sign up
+          </Button>
+        </Link>
+      </div>
     </Layout>
   );
 };

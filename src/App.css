@@ -45,6 +45,19 @@ button {
   border: none;
 }
 
+input {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border: 0.5px solid #9f9f9f;
+  box-sizing: border-box;
+  --webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+input:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
 textarea::placeholder,
 input::placeholder,
 textarea::-webkit-input-placeholder,
