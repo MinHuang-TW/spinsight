@@ -5,10 +5,12 @@ import styled from 'styled-components';
 
 const Popup = ({ category, children, handleCancel, open }) => (
   <Container open={open} onClick={handleCancel}>
-    <PopupModal open={open}>
-      <Icon>
-        <img src={fetchIcon(category)} alt='icon' />
-      </Icon>
+    <PopupModal open={open} category={category}>
+      {category && (
+        <Icon>
+          <img src={fetchIcon(category)} alt='icon' />
+        </Icon>
+      )}
       {children}
     </PopupModal>
   </Container>
@@ -18,13 +20,14 @@ export default Popup;
 
 const PopupModal = styled(Modal)`
   top: 50%;
+  padding: ${(props) => !props.category && '2.5rem 0'};
   transform: translate(-50%, -50%);
   transform: ${(props) =>
     props.open
       ? 'translate(-50%, -50%) scale(1)'
       : 'translate(-50%, -50%) scale(0)'};
-  --webkit-transition: transform 0.1s ease-in-out;
-  transition: transform 0.1s ease-in-out;
+  --webkit-transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 `;
 
 const Container = styled.section`
@@ -34,8 +37,8 @@ const Container = styled.section`
   background: rgba(240, 241, 241, 0.8);
   --webkit-backdrop-filter: blur(1.5px);
   backdrop-filter: blur(1.5px);
-  -webkit-transition: ${(props) => props.open || 'all 0.1s ease-in-out'};
-  transition: ${(props) => props.open || 'all 0.1s ease-in-out'};
+  -webkit-transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
+  transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
   z-index: ${(props) => (props.open ? 999 : -999)};
 `;
 

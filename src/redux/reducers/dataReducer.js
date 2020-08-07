@@ -37,13 +37,6 @@ export default function (state = initialState, action) {
 
     case SAVE_QUESTION:
     case UNSAVE_QUESTION:
-      // let index = state.questions.findIndex(
-      //   (question) => question.questionId === action.payload.questionId
-      // );
-      // state.questions[index] = action.payload;
-      if (state.question.questionId === action.payload.questionId) {
-        state.question = action.payload;
-      }
       return {
         ...state,
       };
@@ -59,8 +52,7 @@ export default function (state = initialState, action) {
         ...state,
         question: {
           ...state.question,
-          // TODO:
-          answers: [action.payload],
+          answers: [action.payload, ...state.question.answers],
         },
       };
 

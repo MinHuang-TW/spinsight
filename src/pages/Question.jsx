@@ -152,8 +152,13 @@ const QuestionInput = styled.textarea.attrs({
   border: 0.5px solid #9f9f9f;
   color: ${(props) => props.theme.secondary};
   box-sizing: border-box;
+
   &:-webkit-autofill {
     -webkit-text-fill-color: ${(props) => props.theme.secondary} !important;
+  }
+
+  &:focus {
+    border-color: ${(props) => props.theme.primary};
   }
 `;
 

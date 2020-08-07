@@ -14,7 +14,7 @@ import { randomize, getRotation, fetchCategory } from '../util/functions';
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import Navbar from '../components/Navbar';
-// import Progress from '../components/Progress';
+import Progress from '../components/Progress';
 
 import Input from '../elements/Input.js';
 import Button from '../elements/Button';
@@ -32,18 +32,20 @@ const Home = ({
   saveQuestion,
   unsaveQuestion,
   submitAnswer,
+  clearErrors,
   user: {
     credentials: { name },
     saves,
   },
-  data: { questions, question, loading },
-  UI,
+  data: { questions, question },
+  UI: { errors, loading },
 }) => {
   const [category, setCategory] = useState(null);
   const [answer, setAnswer] = useState('');
   const [clicked, setClicked] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [submited, setSubmited] = useState(false);
 
   const isSaved = useCallback(() => {
     if (
@@ -72,23 +74,36 @@ const Home = ({
     <StarButton src={Unstar} onClick={handleSave} />
   );
 
-  const handleCancel = useCallback(({ target }) => {
-    if (target.tagName !== 'SECTION') return;
-    setShowPopup(false);
-  }, []);
+  const handleCancel = useCallback(
+    ({ target }) => {
+      if (target.tagName !== 'SECTION') return;
+      if (!loading) setShowPopup(false);
+      if (errors) clearErrors();
+    },
+    [errors, clearErrors, loading]
+  );
 
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
+      if (!category || !Object.keys(question).length) return;
+
       const { questionId } = question;
       submitAnswer(category, questionId, { answer });
-      // if (!UI.errors && !UI.loading) setShowPopup(false);
+
+      if (!loading && !errors) {
+        setAnswer('');
+        setSubmited(true);
+        setCategory(null);
+      }
     },
-    [category, question, answer, submitAnswer]
+    [category, question, answer, submitAnswer, loading, errors]
   );
 
   const handleSpin = useCallback(() => {
+    setSubmited(false);
     setClicked(true);
+
     const randomNumber = randomize(6); // return 0 - 5
     const randomCategory = fetchCategory(randomNumber);
     const randomRotation = getRotation(randomNumber);
@@ -97,10 +112,9 @@ const Home = ({
   }, []);
 
   const handleSpinEnd = useCallback(() => {
-    if (loading) return;
-    setShowPopup(true);
     setClicked(false);
-  }, [loading]);
+    if (Object.keys(question).length) setShowPopup(true);
+  }, [question]);
 
   useEffect(() => {
     if (!category) return;
@@ -108,33 +122,50 @@ const Home = ({
   }, [category, getCategoryQuestions]);
 
   useEffect(() => {
-    if (questions.length === 0) return;
-    const index = randomize(questions.length);
-    const resultQuestion = questions[index];
-    setQuestion(resultQuestion);
-  }, [questions, setQuestion]);
+    if (questions.length && category) {
+      const index = randomize(questions.length);
+      const randomId = questions[index].questionId;
+      setQuestion(category, randomId);
+    }
+  }, [questions, setQuestion]); // eslint-disable-line
 
   return (
     <Layout>
-      <Popup category={category} open={showPopup} handleCancel={handleCancel}>
+      <Popup
+        category={loading ? null : submited ? 'OK' : question.category}
+        open={showPopup}
+        handleCancel={handleCancel}
+      >
         <PopupForm onSubmit={handleSubmit}>
-          {SaveButton}
-          <h2>{question.question}</h2>
-          <Input
-            type='text'
-            name='answer'
-            label='Answer'
-            placeholder='Answer'
-            value={answer}
-            onChange={handleChange}
-          />
-          <Button
-            type='submit'
-            form='questionForm'
-            disabled={answer.trim() === ''}
-          >
-            Submit
-          </Button>
+          {loading ? (
+            <Progress nobg />
+          ) : !submited ? (
+            <>
+              {SaveButton}
+              <h2>{question.question}</h2>
+              <Input
+                type='text'
+                name='answer'
+                label='Answer'
+                placeholder='Answer'
+                value={answer}
+                onChange={handleChange}
+              />
+              <Button
+                type='submit'
+                form='questionForm'
+                disabled={answer.trim() === ''}
+              >
+                Submit
+              </Button>
+            </>
+          ) : (
+            <ul>
+              {question.answers.map(({ answer }) => (
+                <li key={answer}>{answer}</li>
+              ))}
+            </ul>
+          )}
         </PopupForm>
       </Popup>
 
@@ -164,6 +195,7 @@ Home.propTypes = {
   saveQuestion: PropTypes.func.isRequired,
   unsaveQuestion: PropTypes.func.isRequired,
   submitAnswer: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired,
@@ -181,6 +213,7 @@ const mapActionsToProps = {
   saveQuestion,
   unsaveQuestion,
   submitAnswer,
+  clearErrors,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Home);
@@ -189,9 +222,9 @@ const PopupForm = styled.form.attrs({
   id: 'questionForm',
 })`
   width: 70%;
-  margin: 3rem auto;
+  margin: 2.5rem auto;
   ${Input} {
-    margin: 3rem auto;
+    margin: 2.5rem auto;
   }
 `;
 

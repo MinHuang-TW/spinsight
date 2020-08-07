@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logoutUser } from '../redux/actions/userActions';
+import { getUserData, logoutUser } from '../redux/actions/userActions';
 import { categories, fetchIcon, count } from '../util/functions';
 
 import Layout from '../components/Layout';
@@ -39,6 +39,7 @@ const Block = ({ text, data, types }) => (
 );
 
 const Profile = ({
+  getUserData,
   logoutUser,
   user: {
     credentials: { name, image },
@@ -51,6 +52,10 @@ const Profile = ({
     logoutUser();
   }, [logoutUser]);
 
+  useEffect(() => {
+    getUserData();
+  }, [getUserData]);
+
   if (!localStorage.FBIdToken) return <Redirect to='/login' />;
 
   return (
@@ -62,7 +67,7 @@ const Profile = ({
           <Title>{name}</Title>
 
           <Block types={categories} text='Answer' data={answers} />
-          <Block types={categories} text='Saved Question' data={saves} />
+          <Block types={categories} text='Save' data={saves} />
 
           <LogoutButton onClick={handleLogout}>log out</LogoutButton>
 
@@ -80,19 +85,21 @@ const Profile = ({
 };
 
 Profile.propTypes = {
-  user: PropTypes.object.isRequired,
+  getUserData: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { logoutUser })(Profile);
+export default connect(mapStateToProps, { getUserData, logoutUser })(Profile);
 
 const Container = styled.div`
   background: white;
   width: 95%;
+  height: 2000px;
   max-width: 400px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   /* border-radius: 0px 0px 1rem 1rem; */

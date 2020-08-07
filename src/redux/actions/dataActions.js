@@ -1,6 +1,6 @@
 import {
   LOADING_UI,
-  // STOP_LOADING_UI,
+  STOP_LOADING_UI,
   LOADING_DATA,
   SET_QUESTIONS,
   SET_QUESTION,
@@ -32,25 +32,28 @@ export const getCategoryQuestions = (category) => (dispatch) => {
     });
 };
 
-export const setQuestion = (question) => (dispatch) => {
-  dispatch({
-    type: SET_QUESTION,
-    payload: question,
-  });
-  // dispatch({ type: LOADING_UI });
+export const setQuestion = (category, questionId) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
 
-  // axios
-  //   .get(
-  //     `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}`
-  //   )
-  //   .then((res) => {
-  //     dispatch({
-  //       type: SET_QUESTION,
-  //       payload: res.data,
-  //     });
-  //     dispatch({ type: STOP_LOADING_UI });
-  //   })
-  //   .catch((err) => console.log(err));
+  axios
+    .get(
+      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}`
+    )
+    .then((res) => {
+      dispatch({
+        type: SET_QUESTION,
+        payload: res.data,
+      });
+      dispatch({
+        type: STOP_LOADING_UI,
+      });
+    })
+    .catch((err) => console.log(err));
+
+  // dispatch({
+  //   type: SET_QUESTION,
+  //   payload: question,
+  // });
 };
 
 export const postQuestion = (newQuestion) => (dispatch) => {
@@ -102,6 +105,8 @@ export const unsaveQuestion = (category, questionId) => (dispatch) => {
 };
 
 export const submitAnswer = (category, questionId, answer) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
+
   axios
     .post(
       `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/answer`,
@@ -112,10 +117,10 @@ export const submitAnswer = (category, questionId, answer) => (dispatch) => {
         type: SUBMIT_ANSWER,
         payload: res.data,
       });
+      dispatch({ type: STOP_LOADING_UI });
       dispatch(clearErrors());
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: SET_ERRORS,
         payload: err.response.data,

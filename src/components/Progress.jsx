@@ -1,27 +1,50 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Progress = ({ login }) => (
-  <Container login={login}>
-    <ElementContainer>
-      <Element>
-        <div>
+const Progress = ({ login, nobg }) => (
+  <>
+    {nobg ? (
+      <ElementContainer>
+        <Element>
           <div>
-            <div />
+            <div>
+              <div />
+            </div>
+            <div>
+              <div />
+            </div>
+            <div>
+              <div />
+            </div>
+            <div>
+              <div />
+            </div>
           </div>
-          <div>
-            <div />
-          </div>
-          <div>
-            <div />
-          </div>
-          <div>
-            <div />
-          </div>
-        </div>
-      </Element>
-    </ElementContainer>
-  </Container>
+        </Element>
+      </ElementContainer>
+    ) : (
+      <Container login={login}>
+        <ElementContainer>
+          <Element>
+            <div>
+              <div>
+                <div />
+              </div>
+              <div>
+                <div />
+              </div>
+              <div>
+                <div />
+              </div>
+              <div>
+                <div />
+              </div>
+            </div>
+          </Element>
+        </ElementContainer>
+      </Container>
+    )}
+  </>
 );
 
 export default Progress;
@@ -48,10 +71,10 @@ const ElementContainer = styled.div`
   display: inline-block;
   overflow: hidden;
   background: none;
-  /* position: absolute;
+  position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%);
 `;
 
 const spin = keyframes` {

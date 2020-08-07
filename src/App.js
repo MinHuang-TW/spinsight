@@ -6,7 +6,7 @@ import store from './redux/store';
 import { Provider } from 'react-redux';
 import { SET_AUTHENTICATED } from './redux/types';
 import { logoutUser, getUserData } from './redux/actions/userActions';
-import { Signup, Login, Home, Profile, Question, Answer } from './pages';
+import { Signup, Login, Home, Profile, Question } from './pages';
 import AuthRoute from './components/AuthRoute';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './util/theme';
@@ -33,7 +33,6 @@ const App = () => (
           <AuthRoute exact path='/login' component={Login} />
 
           <Route path='/getQuestion' component={Home} />
-          <Route path='/showAnswer' component={Answer} />
           <Route path='/addQuestion' component={Question} />
           <Route path='/profile' component={Profile} />
 
