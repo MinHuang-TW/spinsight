@@ -58,14 +58,14 @@ const Question = ({
   return (
     <Layout>
       {loading ? (
-        <Progress />
+        <Progress bottom />
       ) : (
         <Popup category='OK' open={submited} handleCancel={handleCancel}>
           <Text>You have submitted your question successfully.</Text>
         </Popup>
       )}
 
-      <h1>Hello, {name} !</h1>
+      <Title>Hello, {name} !</Title>
       <Container>
         <h2>What would you like to ask your colleagues ?</h2>
         <Form onSubmit={handleSubmit}>
@@ -115,14 +115,21 @@ export default connect(mapStateToProps, mapActionsToProps)(Question);
 
 const Container = styled.section`
   width: 75%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  ${Button} {
-    margin: 0px;
+  h2 {
+    margin-bottom: 2.5rem;
   }
+  ${Button} {
+    margin: 3rem auto 0;
+  }
+`;
+
+const Title = styled.h1`
+  margin-top: 4rem;
 `;
 
 const Text = styled.h2`
@@ -133,7 +140,7 @@ const Form = styled.form.attrs({
   id: 'questionForm',
 })`
   width: 100%;
-  height: 32.5%;
+  height: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;

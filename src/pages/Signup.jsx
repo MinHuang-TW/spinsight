@@ -83,7 +83,7 @@ const Signup = ({
   );
 
   return (
-    <Layout width='62%'>
+    <Container>
       {loading && <Progress />}
       {errors && <Alert>{Object.values(errors)}</Alert>}
 
@@ -136,13 +136,15 @@ const Signup = ({
         ))}
       </SignupForm>
 
-      <Link to='/login'>
-        <Button fullWidth gutterBottom onClick={clearErrors}>
-          Log in
-        </Button>
-      </Link>
-      <SignupButton disabled={validation}>sign up</SignupButton>
-    </Layout>
+      <div>
+        <Link to='/login'>
+          <Button fullWidth gutterBottom onClick={clearErrors}>
+            Log in
+          </Button>
+        </Link>
+        <SignupButton disabled={validation}>sign up</SignupButton>
+      </div>
+    </Container>
   );
 };
 
@@ -165,6 +167,12 @@ const mapActionsToProps = {
 
 export default connect(mapStateToProps, mapActionsToProps)(Signup);
 
+const Container = styled(Layout).attrs({
+  width: '62%',
+  maxWidth: '260px',
+  margin: '5rem auto',
+})``;
+
 const SelectedAvatar = styled.img.attrs({
   alt: 'add icon',
 })`
@@ -172,8 +180,7 @@ const SelectedAvatar = styled.img.attrs({
 `;
 
 const AvatarModal = styled(Modal)`
-  bottom: 0px;
-  margin-top: 5rem;
+  height: calc(100% - 5rem);
   padding-top: 7rem;
   top: ${(props) => (props.open ? '3rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
@@ -196,7 +203,6 @@ const AddContainer = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 10;
-  margin-top: 5rem;
   a {
     width: 100%;
   }
@@ -222,7 +228,7 @@ const AddButton = styled.button`
 const SignupForm = styled.form.attrs({
   id: 'signupForm',
 })`
-  height: 100%;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -255,7 +261,6 @@ const Avatar = styled.img`
 const SignupButton = styled(Button).attrs({
   type: 'submit',
   form: 'signupForm',
-  fullWidth: true,
 })`
-  margin-bottom: 5rem;
+  width: 100%;
 `;

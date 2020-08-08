@@ -35,8 +35,8 @@ const Login = ({
   );
 
   return (
-    <Layout barHeight='6.5rem' width='62%' margin='0 auto 5rem'>
-      {loading && <Progress login />}
+    <Container>
+      {loading && <Progress />}
       {errors && <Alert>{Object.values(errors)}</Alert>}
 
       <h1>Welcome back !</h1>
@@ -77,7 +77,7 @@ const Login = ({
           </Button>
         </Link>
       </div>
-    </Layout>
+    </Container>
   );
 };
 
@@ -94,6 +94,13 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { loginUser, clearErrors })(Login);
+
+const Container = styled(Layout).attrs({
+  width: '62%',
+  maxWidth: '260px',
+  barHeight: '6.5rem',
+  margin: '4rem auto 5rem',
+})``;
 
 const LoginForm = styled.form`
   height: 100%;

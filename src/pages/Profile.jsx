@@ -30,7 +30,7 @@ const Block = ({ text, data, types }) => (
         return (
           <CategoryContainer key={type} color={type} count={dataCount}>
             <img src={fetchIcon(type)} alt={type} />
-            <p>{dataCount}</p>
+            {dataCount ? <p>{dataCount}</p> : null}
           </CategoryContainer>
         );
       })}
@@ -68,7 +68,7 @@ const Profile = ({
 
           <Link to='/'>
             <BackButton aria-label='cancel'>
-              <img width={40} src={CancelIcon} alt='cancel icon' />
+              <img src={CancelIcon} alt='cancel icon' />
             </BackButton>
           </Link>
         </Container>
@@ -174,6 +174,10 @@ const BackButton = styled(RadioButton)`
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
+
+  img {
+    width: 40px;
+  }
 `;
 
 const LogoutButton = styled(Button)`

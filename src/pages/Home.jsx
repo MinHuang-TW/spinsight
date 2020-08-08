@@ -34,7 +34,10 @@ const Home = ({
   unsaveQuestion,
   submitAnswer,
   clearErrors,
-  user: { credentials: { name }, saves },
+  user: {
+    credentials: { name },
+    saves,
+  },
   data: { questions, question },
   UI: { errors, loading },
 }) => {
@@ -68,25 +71,31 @@ const Home = ({
     setAnswer(input.value);
   }, []);
 
-  const handleCancel = useCallback(({ target }) => {
-    if (target.tagName !== 'SECTION') return;
-    if (!loading) setShowPopup(false);
-    if (errors) clearErrors();
-  }, [errors, clearErrors, loading]);
+  const handleCancel = useCallback(
+    ({ target }) => {
+      if (target.tagName !== 'SECTION') return;
+      if (!loading) setShowPopup(false);
+      if (errors) clearErrors();
+    },
+    [errors, clearErrors, loading]
+  );
 
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-    if (!category || !Object.keys(question).length) return;
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (!category || !Object.keys(question).length) return;
 
-    const { questionId } = question;
-    submitAnswer(category, questionId, { answer });
+      const { questionId } = question;
+      submitAnswer(category, questionId, { answer });
 
-    if (!loading && !errors) {
-      setAnswer('');
-      setSubmited(true);
-      setCategory(null);
-    }
-  }, [category, question, answer, submitAnswer, loading, errors]);
+      if (!loading && !errors) {
+        setAnswer('');
+        setSubmited(true);
+        setCategory(null);
+      }
+    },
+    [category, question, answer, submitAnswer, loading, errors]
+  );
 
   const handleSpin = useCallback(() => {
     setSubmited(false);
@@ -147,6 +156,7 @@ const Home = ({
       </AnswerList>
     </>
   );
+
   return (
     <Layout>
       <Popup
@@ -159,7 +169,7 @@ const Home = ({
         </PopupForm>
       </Popup>
 
-      <h1>Hello, {name} !</h1>
+      <Title>Hello, {name} !</Title>
       <WheelContainer>
         <RadioButton border onClick={handleSpin}>
           Get a Question
@@ -207,6 +217,10 @@ const mapActionsToProps = {
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Home);
+
+const Title = styled.h1`
+  margin-top: 4rem;
+`;
 
 const PopupForm = styled.form.attrs({
   id: 'questionForm',

@@ -2,10 +2,10 @@ import React from 'react';
 import TopBar from './TopBar';
 import styled from 'styled-components';
 
-const Layout = ({ barHeight, width, margin, children }) => (
+const Layout = ({ barHeight, width, maxWidth, margin, children }) => (
   <Window>
     <TopBar height={barHeight} />
-    <Main width={width} margin={margin}>
+    <Main width={width} maxWidth={maxWidth} margin={margin}>
       {children}
     </Main>
   </Window>
@@ -28,7 +28,7 @@ const Main = styled.main`
   position: relative;
   margin: ${(props) => props.margin || 'auto'};
   width: ${(props) => props.width || '100%'};
-  max-width: 548px;
+  max-width: ${(props) => props.maxWidth || '548px'};
   height: 100%;
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
   display: -ms-flexbox; /* TWEENER - IE 10 */

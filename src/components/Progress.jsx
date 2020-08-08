@@ -1,47 +1,34 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
-const Progress = ({ login, nobg }) => (
+const Circular = () => (
+  <ElementContainer>
+    <Element>
+      <div>
+        <div>
+          <div />
+        </div>
+        <div>
+          <div />
+        </div>
+        <div>
+          <div />
+        </div>
+        <div>
+          <div />
+        </div>
+      </div>
+    </Element>
+  </ElementContainer>
+);
+
+const Progress = ({ nobg, bottom }) => (
   <>
     {nobg ? (
-      <ElementContainer>
-        <Element>
-          <div>
-            <div>
-              <div />
-            </div>
-            <div>
-              <div />
-            </div>
-            <div>
-              <div />
-            </div>
-            <div>
-              <div />
-            </div>
-          </div>
-        </Element>
-      </ElementContainer>
+      <Circular />
     ) : (
-      <Container login={login}>
-        <ElementContainer>
-          <Element>
-            <div>
-              <div>
-                <div />
-              </div>
-              <div>
-                <div />
-              </div>
-              <div>
-                <div />
-              </div>
-              <div>
-                <div />
-              </div>
-            </div>
-          </Element>
-        </ElementContainer>
+      <Container bottom={bottom}>
+        <Circular />
       </Container>
     )}
   </>
@@ -51,18 +38,21 @@ export default Progress;
 
 const Container = styled.section`
   position: absolute;
+  bottom: -5rem;
   width: 100vw;
-  height: ${(props) =>
-    props.login ? 'calc(100vh - 6.5rem)' : 'calc(100vh - 0.5rem)'};
-  background: rgba(240, 241, 241, 0.8);
-  --webkit-backdrop-filter: blur(1.5px);
-  backdrop-filter: blur(1.5px);
+  height: 100vh;
+  --webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
   z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+  ${(props) =>
+    props.bottom &&
+    css`
+      top: -0.5rem;
+      bottom: 0px;
+    `}
 `;
 
 const ElementContainer = styled.div`
