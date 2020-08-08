@@ -54,7 +54,7 @@ const Profile = ({
   if (!localStorage.FBIdToken) return <Redirect to='/login' />;
 
   return (
-    <Layout>
+    <Layout height='auto' overflow='true'>
       {!loading ? (
         <Container>
           <LightBulb answers={answers} />
@@ -93,12 +93,12 @@ export default connect(mapStateToProps, { logoutUser })(Profile);
 const Container = styled.div`
   background: white;
   width: 95%;
-  height: 2000px;
+  height: auto;
   max-width: 400px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-  /* border-radius: 0px 0px 1rem 1rem; */
+  border-radius: 0px 0px 1rem 1rem;
   padding-bottom: 6.5rem;
-  overflow-y: auto;
+  margin-bottom: 1rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
   ::-webkit-scrollbar {
@@ -110,7 +110,6 @@ const Avatar = styled.img.attrs({
   alt: 'avatar',
 })`
   width: 100px;
-  margin: 1rem auto 0;
 `;
 
 const Title = styled.h1`
@@ -124,14 +123,14 @@ const Grid = styled.div`
   margin: 2rem auto;
   width: 70%;
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 1rem 2rem;
+  grid-template-columns: repeat(3, 4rem);
+  justify-content: space-between;
+  row-gap: 1rem;
 `;
 
 const Divider = styled.div`
   height: 1.5rem;
   position: relative;
-  /* margin: 2rem auto; */
 
   ${Line},
   p {
@@ -170,8 +169,8 @@ const BackButton = styled(RadioButton)`
   height: 3rem;
   background: #b2b2b2;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  position: absolute;
-  bottom: 1.5rem;
+  position: fixed;
+  bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
 
@@ -182,6 +181,15 @@ const BackButton = styled(RadioButton)`
 
 const LogoutButton = styled(Button)`
   background: white;
+  width: 70%;
   color: ${(props) => props.theme.primary};
   border: 1.5px solid ${(props) => props.theme.primary};
+  font-weight: bold;
+  --webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+
+  &:hover {
+    color: white;
+    background: ${(props) => props.theme.primary};
+  }
 `;

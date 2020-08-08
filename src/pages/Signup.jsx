@@ -128,7 +128,9 @@ const Signup = ({
           <SignupInput
             key={type.name}
             label={type.name}
-            placeholder={type.name}
+            placeholder={`${type.name} ${
+              type.name === 'password' ? '(at least 6 letters)' : ''
+            }`}
             onChange={handleChange}
             error={errors && Object.keys(errors).toString() === type.name}
             {...type}
@@ -191,6 +193,9 @@ const AvatarModal = styled(Modal)`
   transform: translate(-50%, 0%);
   --webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+  &:focus {
+    outline: 0;
+  }
 `;
 
 const Text = styled.p`

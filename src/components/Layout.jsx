@@ -2,10 +2,24 @@ import React from 'react';
 import TopBar from './TopBar';
 import styled from 'styled-components';
 
-const Layout = ({ barHeight, width, maxWidth, margin, children }) => (
+const Layout = ({
+  barHeight,
+  width,
+  maxWidth,
+  margin,
+  children,
+  height,
+  overflow = null,
+}) => (
   <Window>
     <TopBar height={barHeight} />
-    <Main width={width} maxWidth={maxWidth} margin={margin}>
+    <Main
+      width={width}
+      maxWidth={maxWidth}
+      margin={margin}
+      height={height}
+      overflow={overflow}
+    >
       {children}
     </Main>
   </Window>
@@ -14,10 +28,9 @@ const Layout = ({ barHeight, width, maxWidth, margin, children }) => (
 export default Layout;
 
 const Window = styled.div`
-  /* width: 100vw; */
   height: 100vh;
-  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
@@ -29,9 +42,9 @@ const Main = styled.main`
   margin: ${(props) => props.margin || 'auto'};
   width: ${(props) => props.width || '100%'};
   max-width: ${(props) => props.maxWidth || '548px'};
-  height: 100%;
-  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-  display: -ms-flexbox; /* TWEENER - IE 10 */
+  height: ${(props) => props.height || '100%'};
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
@@ -39,4 +52,11 @@ const Main = styled.main`
   align-items: center;
   text-align: center;
   color: ${(props) => props.theme.secondary};
+  overflow-y: ${(props) => props.overflow && 'scroll'};
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

@@ -37,6 +37,7 @@ const Home = ({
   user: {
     credentials: { name },
     saves,
+    answers,
   },
   data: { questions, question },
   UI: { errors, loading },
@@ -118,12 +119,18 @@ const Home = ({
   }, [category, getCategoryQuestions]);
 
   useEffect(() => {
+    const record = [];
+    [...answers, ...saves].map(({ questionId }) => record.push(questionId));
+
     if (questions.length && category) {
-      const index = randomize(questions.length);
-      const randomId = questions[index].questionId;
+      const filtered = questions.filter(
+        ({ questionId }) => !record.includes(questionId)
+      );
+      const index = randomize(filtered.length);
+      const randomId = filtered[index].questionId;
       setQuestion(category, randomId);
     } // eslint-disable-next-line
-  }, [questions, setQuestion]);
+  }, [questions, setQuestion, answers, saves]);
 
   const PopupContent = !submited ? (
     <>
@@ -220,7 +227,7 @@ const Title = styled.h1`
 const PopupForm = styled.form.attrs({
   id: 'questionForm',
 })`
-  width: 70%;
+  width: 80%;
   margin: 2.5rem auto;
   ${Input} {
     margin: 2.5rem auto;
@@ -261,7 +268,7 @@ const AnswerList = styled.ul`
 
   img {
     width: 2.5rem;
-    margin: auto 2rem auto 1rem;
+    margin: auto 1rem;
   }
 
   p {
