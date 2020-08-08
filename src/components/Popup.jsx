@@ -21,12 +21,17 @@ export default Popup;
 const PopupModal = styled(Modal)`
   top: 50%;
   padding: ${(props) => !props.category && '8.3rem 0'};
-  transform: translate(-50%, -50%);
+
+  /* transform: translate(-50%, -50%); */
+  --webkit-transform: ${(props) =>
+    props.open
+      ? 'translate(-50%, -50%) scale(1)'
+      : 'translate(-50%, -50%) scale(0)'};
   transform: ${(props) =>
     props.open
       ? 'translate(-50%, -50%) scale(1)'
       : 'translate(-50%, -50%) scale(0)'};
-  --webkit-transition: transform 0.2s ease-in-out;
+
   transition: transform 0.2s ease-in-out;
   cursor: default;
 `;
@@ -38,7 +43,7 @@ const Container = styled.section`
   background: rgba(240, 241, 241, 0.8);
   --webkit-backdrop-filter: blur(1.5px);
   backdrop-filter: blur(1.5px);
-  -webkit-transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
+
   transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
   z-index: ${(props) => (props.open ? 999 : -999)};
   cursor: pointer;

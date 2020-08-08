@@ -88,7 +88,7 @@ const Signup = ({
       {errors && <Alert>{Object.values(errors)}</Alert>}
 
       <AddContainer>
-        <AddButton avatar={image} onClick={handleOpen}>
+        <AddButton avatar={image} onClick={handleOpen} open={isOpen}>
           <SelectedAvatar src={image || AddIcon} image={image} />
         </AddButton>
         <Text>{image ? 'change' : 'choose'} your Avatar</Text>
@@ -189,10 +189,11 @@ const AvatarModal = styled(Modal)`
   padding-top: 7rem;
   top: ${(props) => (props.open ? '3rem' : '150vh')};
   border-radius: 0.5rem 0.5rem 0 0;
-  -webkit-transform: translate(-50%, 0%);
+
+  --webkit-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
-  --webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+
   &:focus {
     outline: 0;
   }
@@ -231,6 +232,13 @@ const AddButton = styled.button`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+
+  -webkit-transform: ${(props) =>
+    props.open && !props.avatar ? 'rotate(135deg)' : 'rotate(0)'};
+  transform: ${(props) =>
+    props.open && !props.avatar ? 'rotate(135deg)' : 'rotate(0)'};
+
+  transition: ${(props) => !props.avatar && 'transform 0.2s ease-in-out'};
 `;
 
 const SignupForm = styled.form.attrs({

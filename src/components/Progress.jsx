@@ -43,7 +43,7 @@ const Container = styled.section`
   height: 100vh;
   --webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
-  -webkit-transition: all 0.1s ease-in-out;
+
   transition: all 0.1s ease-in-out;
   z-index: 100;
 

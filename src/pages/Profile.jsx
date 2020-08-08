@@ -168,7 +168,7 @@ const BackButton = styled(RadioButton)`
   width: 3rem;
   height: 3rem;
   background: #b2b2b2;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
   position: fixed;
   bottom: 2.5rem;
   left: 50%;
@@ -185,7 +185,7 @@ const LogoutButton = styled(Button)`
   color: ${(props) => props.theme.primary};
   border: 1.5px solid ${(props) => props.theme.primary};
   font-weight: bold;
-  --webkit-transition: all 0.4s ease-in-out;
+
   transition: all 0.4s ease-in-out;
 
   &:hover {
