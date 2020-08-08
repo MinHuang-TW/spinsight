@@ -49,9 +49,9 @@ const Question = ({
     if (!submited) return;
     setCategory('permanent');
     setQuestion('');
-    errors && clearErrors();
+    if (errors) clearErrors();
 
-    const timer = setTimeout(() => setSubmited(false), 1600);
+    const timer = setTimeout(() => setSubmited(false), 3000);
     return () => clearTimeout(timer);
   }, [submited, clearErrors, errors]);
 

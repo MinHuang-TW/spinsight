@@ -137,12 +137,15 @@ const Signup = ({
       </SignupForm>
 
       <div>
-        <Link to='/login'>
-          <Button fullWidth gutterBottom onClick={clearErrors}>
+        <SignupButton disabled={validation} gutterBottom>
+          sign up
+        </SignupButton>
+        <small>
+          Have an account?
+          <StyledLink to='/login' onClick={errors && clearErrors}>
             Log in
-          </Button>
-        </Link>
-        <SignupButton disabled={validation}>sign up</SignupButton>
+          </StyledLink>
+        </small>
       </div>
     </Container>
   );
@@ -263,4 +266,13 @@ const SignupButton = styled(Button).attrs({
   form: 'signupForm',
 })`
   width: 100%;
+`;
+
+const StyledLink = styled(Link)`
+  color: ${(props) => props.theme.primary};
+  margin-left: 4px;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
 `;

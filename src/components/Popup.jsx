@@ -20,7 +20,7 @@ export default Popup;
 
 const PopupModal = styled(Modal)`
   top: 50%;
-  padding: ${(props) => !props.category && '2.5rem 0'};
+  padding: ${(props) => !props.category && '8.3rem 0'};
   transform: translate(-50%, -50%);
   transform: ${(props) =>
     props.open
@@ -28,11 +28,12 @@ const PopupModal = styled(Modal)`
       : 'translate(-50%, -50%) scale(0)'};
   --webkit-transition: transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
+  cursor: default;
 `;
 
 const Container = styled.section`
   position: absolute;
-  width: 100%;
+  width: 100vw;
   height: calc(100vh - 0.5rem);
   background: rgba(240, 241, 241, 0.8);
   --webkit-backdrop-filter: blur(1.5px);
@@ -40,6 +41,7 @@ const Container = styled.section`
   -webkit-transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
   transition: ${(props) => props.open || 'all 0.2s ease-in-out'};
   z-index: ${(props) => (props.open ? 999 : -999)};
+  cursor: pointer;
 `;
 
 const Icon = styled.div`

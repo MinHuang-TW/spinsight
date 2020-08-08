@@ -17,8 +17,8 @@ const Login = ({
   history,
   UI: { loading, errors },
 }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('user@email.com');
+  const [password, setPassword] = useState('123456');
 
   const handleChange = useCallback(({ target: input }) => {
     if (input.name === 'email') setEmail(input.value);
@@ -71,11 +71,12 @@ const Login = ({
           Log in
         </Button>
 
-        <Link to='/signup'>
-          <Button onClick={clearErrors} fullWidth>
-            sign up
-          </Button>
-        </Link>
+        <small>
+          Don't have an account?
+          <StyledLink to='/signup' onClick={errors && clearErrors}>
+            Sign Up
+          </StyledLink>
+        </small>
       </div>
     </Container>
   );
@@ -108,4 +109,13 @@ const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const StyledLink = styled(Link)`
+  color: ${(props) => props.theme.primary};
+  margin-left: 4px;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
 `;

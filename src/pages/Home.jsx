@@ -20,11 +20,11 @@ import Input from '../elements/Input.js';
 import Button from '../elements/Button';
 import RadioButton from '../elements/RadioButton';
 
+import Wheel from '../images/wheel.svg';
 import Star from '../images/star.png';
 import Unstar from '../images/unstar.png';
-import SpinWheel from '../images/spinWheel.png';
-import Pointer from '../images/pointer.png';
-import { WomenAvatars, MenAvatars } from '../images/avatar';
+import Pointer from '../images/pointer.svg';
+import { MenAvatars } from '../images/avatar';
 import styled, { css, keyframes } from 'styled-components';
 
 const Home = ({
@@ -47,8 +47,6 @@ const Home = ({
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [submited, setSubmited] = useState(false);
-  const avatars = [...WomenAvatars, ...MenAvatars];
-  const avatarCount = avatars.length;
 
   const isSaved = useCallback(() => {
     if (
@@ -144,15 +142,12 @@ const Home = ({
     <>
       <h2>All Answers</h2>
       <AnswerList>
-        {question.answers.map(({ answer }) => {
-          const idx = randomize(avatarCount);
-          return (
-            <li key={answer}>
-              <img src={avatars[idx]} alt='avatar' />
-              <p>{answer}</p>
-            </li>
-          );
-        })}
+        {question.answers.map(({ answer }, index) => (
+          <li key={answer}>
+            <img src={MenAvatars[index]} alt='avatar' />
+            <p>{answer}</p>
+          </li>
+        ))}
       </AnswerList>
     </>
   );
@@ -176,8 +171,8 @@ const Home = ({
         </RadioButton>
 
         <img src={Pointer} alt='pointer' />
-        <Wheel
-          src={SpinWheel}
+        <SpinWheel
+          src={Wheel}
           clicked={clicked}
           rotation={rotation}
           onAnimationEnd={handleSpinEnd}
@@ -237,6 +232,7 @@ const AnswerInput = styled.input.attrs({
   name: 'answer',
   label: 'Answer',
   placeholder: 'Answer',
+  autoFocus: true,
 })`
   height: ${(props) => props.height && props.height};
   color: ${(props) => props.theme.secondary};
@@ -294,7 +290,7 @@ const spin = (rotation) => keyframes`
   }
 `;
 
-const Wheel = styled.img.attrs({
+const SpinWheel = styled.img.attrs({
   alt: 'spin wheel',
 })`
   border-radius: 50%;
@@ -322,7 +318,7 @@ const WheelContainer = styled.div`
   }
 
   button,
-  ${Wheel} {
+  ${SpinWheel} {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   }
   img {
@@ -337,5 +333,15 @@ const WheelContainer = styled.div`
     padding: 1rem;
     width: 8rem;
     height: 8rem;
+
+    @media (max-width: 350px) {
+      width: 7rem;
+      height: 7rem;
+    }
+
+    @media (min-width: 400px) {
+      width: 9rem;
+      height: 9rem;
+    }
   }
 `;

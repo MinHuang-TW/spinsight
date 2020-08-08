@@ -12,5 +12,5 @@ export default styled.button`
   border-radius: 5rem;
   padding: 0.75rem 4rem;
   margin: auto;
-  margin-bottom: ${(props) => props.gutterBottom && '1rem'};
+  margin-bottom: ${(props) => props.gutterBottom && '2.5rem'};
 `;
