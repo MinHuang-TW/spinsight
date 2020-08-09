@@ -9,7 +9,12 @@ import {
   submitAnswer,
   clearErrors,
 } from '../redux/actions/dataActions';
-import { randomize, getRotation, fetchCategory } from '../util/functions';
+import {
+  randomize,
+  shuffle,
+  getRotation,
+  fetchCategory,
+} from '../util/functions';
 
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
@@ -24,7 +29,7 @@ import Wheel from '../images/wheel.svg';
 import Star from '../images/star.png';
 import Unstar from '../images/unstar.png';
 import Pointer from '../images/pointer.svg';
-import { DummyAvatars } from '../images/avatar';
+import { MenAvatars } from '../images/avatar';
 import styled, { css, keyframes } from 'styled-components';
 
 const Home = ({
@@ -48,6 +53,12 @@ const Home = ({
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [submited, setSubmited] = useState(false);
+  let DummyAvatars = [];
+
+  useEffect(() => {
+    if (!clicked) return;
+    DummyAvatars = clicked && shuffle(MenAvatars);
+  }, [clicked]);
 
   const isSaved = useCallback(() => {
     if (
@@ -141,7 +152,7 @@ const Home = ({
         <StarButton src={Unstar} onClick={handleSave} />
       )}
       <h2>{question.question}</h2>
-      <AnswerInput value={answer} onChange={handleChange} />
+      <AnswerInput value={answer} open={showPopup} onChange={handleChange} />
       <Button type='submit' form='questionForm' disabled={answer.trim() === ''}>
         Submit
       </Button>
@@ -242,7 +253,7 @@ const AnswerInput = styled.input.attrs({
   name: 'answer',
   label: 'Answer',
   placeholder: 'Answer',
-  autoFocus: true,
+  autoFocus: (props) => props.open && true,
 })`
   height: ${(props) => props.height && props.height};
   color: ${(props) => props.theme.secondary};

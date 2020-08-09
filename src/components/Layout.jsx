@@ -28,7 +28,7 @@ const Layout = ({
 export default Layout;
 
 const Window = styled.div`
-  height: 100vh;
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;

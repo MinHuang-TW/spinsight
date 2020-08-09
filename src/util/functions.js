@@ -60,6 +60,26 @@ export const categories = [
 
 export const randomize = (number) => Math.floor(Math.random() * number);
 
+export const shuffle = (array) => {
+  let currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
 export const getRotation = (number) => 2160 + number * 60;
 
 export const count = (data, type) =>
