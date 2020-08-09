@@ -17,6 +17,7 @@ export default styled.small`
   width: 100vw;
   height: 3rem;
   line-height: 3rem;
+  margin-top: -5rem;
   position: absolute;
   top: 0;
   --webkit-animation: ${showup} 0.2s ease-in-out;
