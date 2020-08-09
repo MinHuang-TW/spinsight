@@ -17,7 +17,7 @@ export const getCategoryQuestions = (category) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
 
   axios
-    .get(`${process.env.REACT_APP_ENDPOINT}/api/questions/${category}`)
+    .get(`/api/questions/${category}`)
     .then((res) => {
       dispatch({
         type: SET_QUESTIONS,
@@ -36,9 +36,7 @@ export const setQuestion = (category, questionId) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .get(
-      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}`
-    )
+    .get(`/api/question/${category}/${questionId}`)
     .then((res) => {
       dispatch({
         type: SET_QUESTION,
@@ -60,7 +58,7 @@ export const postQuestion = (newQuestion) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post(`${process.env.REACT_APP_ENDPOINT}/api/question`, newQuestion)
+    .post(`/api/question`, newQuestion)
     .then((res) => {
       dispatch({
         type: POST_QUESTION,
@@ -78,9 +76,7 @@ export const postQuestion = (newQuestion) => (dispatch) => {
 
 export const saveQuestion = (category, questionId) => (dispatch) => {
   axios
-    .get(
-      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/save`
-    )
+    .get(`/api/question/${category}/${questionId}/save`)
     .then((res) => {
       dispatch({
         type: SAVE_QUESTION,
@@ -92,9 +88,7 @@ export const saveQuestion = (category, questionId) => (dispatch) => {
 
 export const unsaveQuestion = (category, questionId) => (dispatch) => {
   axios
-    .get(
-      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/unsave`
-    )
+    .get(`/api/question/${category}/${questionId}/unsave`)
     .then((res) => {
       dispatch({
         type: UNSAVE_QUESTION,
@@ -108,10 +102,7 @@ export const submitAnswer = (category, questionId, answer) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post(
-      `${process.env.REACT_APP_ENDPOINT}/api/question/${category}/${questionId}/answer`,
-      answer
-    )
+    .post(`/api/question/${category}/${questionId}/answer`, answer)
     .then((res) => {
       dispatch({
         type: SUBMIT_ANSWER,

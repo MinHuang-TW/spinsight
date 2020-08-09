@@ -24,7 +24,7 @@ import Wheel from '../images/wheel.svg';
 import Star from '../images/star.png';
 import Unstar from '../images/unstar.png';
 import Pointer from '../images/pointer.svg';
-import { MenAvatars } from '../images/avatar';
+import { DummyAvatars } from '../images/avatar';
 import styled, { css, keyframes } from 'styled-components';
 
 const Home = ({
@@ -39,7 +39,7 @@ const Home = ({
     saves,
     answers,
   },
-  data: { questions, question },
+  data: { questions, question, loading: dataLoading },
   UI: { errors, loading },
 }) => {
   const [category, setCategory] = useState(null);
@@ -109,9 +109,10 @@ const Home = ({
 
   const handleSpinEnd = useCallback(() => {
     setClicked(false);
-    if (Object.keys(question).length) setShowPopup(true);
-    else alert('please spin again 🙇🏻');
-  }, [question]);
+    setShowPopup(true);
+    // if (Object.keys(question).length) setShowPopup(true);
+    // else alert('please spin again 🙇🏻');
+  }, []);
 
   useEffect(() => {
     if (!category) return;
@@ -151,7 +152,7 @@ const Home = ({
       <AnswerList>
         {question.answers.map(({ answer }, index) => (
           <li key={answer}>
-            <img src={MenAvatars[index]} alt='avatar' />
+            <img src={DummyAvatars[index]} alt='avatar' />
             <p>{answer}</p>
           </li>
         ))}
@@ -162,12 +163,14 @@ const Home = ({
   return (
     <Layout>
       <Popup
-        category={loading ? null : submited ? 'OK' : question.category}
+        category={
+          loading || dataLoading ? null : submited ? 'OK' : question.category
+        }
         open={showPopup}
         handleCancel={handleCancel}
       >
         <PopupForm onSubmit={handleSubmit}>
-          {loading ? <Progress nobg /> : PopupContent}
+          {loading || dataLoading ? <Progress nobg /> : PopupContent}
         </PopupForm>
       </Popup>
 
@@ -268,7 +271,7 @@ const AnswerList = styled.ul`
 
   img {
     width: 2.5rem;
-    margin: auto 1rem;
+    margin: auto 1.2rem auto 1rem;
   }
 
   p {

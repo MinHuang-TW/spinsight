@@ -12,6 +12,8 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './util/theme';
 import './App.css';
 
+axios.defaults.baseURL = process.env.REACT_APP_ENDPOINT;
+
 const token = localStorage.FBIdToken;
 if (token) {
   const decodedToken = jwtDecode(token);

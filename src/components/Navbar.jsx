@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import RadioButton from '../elements/RadioButton';
 import HomeIcon from '../images/homeIcon.png';
 import AddIcon from '../images/editIcon.png';
+import NoAvatar from '../images/avatar/noAvatar.svg';
 import styled from 'styled-components';
 
 const Navbar = ({
@@ -32,7 +33,7 @@ const Navbar = ({
       )}
       <Link to='/profile'>
         <RadioButton aria-label='profile'>
-          <img width={56} src={image} alt='avatar' />
+          <img width={56} src={image || NoAvatar} alt='avatar' />
         </RadioButton>
       </Link>
     </Container>

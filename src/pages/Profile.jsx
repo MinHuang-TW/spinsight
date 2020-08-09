@@ -10,7 +10,9 @@ import RadioButton from '../elements/RadioButton';
 import Button from '../elements/Button';
 import Progress from '../components/Progress';
 import Line from '../elements/Divider';
+
 import CancelIcon from '../images/cancelIcon.png';
+import NoAvatar from '../images/avatar/noAvatar.svg';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -58,7 +60,7 @@ const Profile = ({
       {!loading ? (
         <Container>
           <LightBulb answers={answers} />
-          <Avatar src={image} />
+          <Avatar src={image || NoAvatar} />
           <Title>{name}</Title>
 
           <Block types={categories} text='Answer' data={answers} />

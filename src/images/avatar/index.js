@@ -18,3 +18,4 @@ import M8 from './M8.png';
 
 export const WomenAvatars = [W1, W2, W3, W4, W5, W6, W7, W8];
 export const MenAvatars = [M1, M2, M3, M4, M5, M6, M7, M8];
+export const DummyAvatars = [M2, M8, M4, M5, M7];

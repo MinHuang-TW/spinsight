@@ -11,7 +11,9 @@ import Input from '../elements/Input';
 import Modal from '../elements/Modal';
 import Button from '../elements/Button';
 import Divider from '../elements/Divider';
+
 import AddIcon from '../images/addIcon.png';
+import NoAvatar from '../images/avatar/noAvatar.svg';
 import { WomenAvatars, MenAvatars } from '../images/avatar';
 import styled from 'styled-components';
 
@@ -45,12 +47,7 @@ const Signup = ({
     setIsOpen(!isOpen);
   }, [isOpen]);
 
-  const handleImage = useCallback(
-    (avatar) => () => {
-      setImage(avatar);
-    },
-    []
-  );
+  const handleImage = useCallback((avatar) => () => setImage(avatar), []);
 
   const handleChange = useCallback(({ target: input }) => {
     switch (input.name) {
@@ -75,7 +72,7 @@ const Signup = ({
         email,
         password,
         confirmPassword,
-        image,
+        image: image || NoAvatar,
       };
       signupUser(newUserData, history);
     },
