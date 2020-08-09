@@ -94,15 +94,17 @@ export default connect(mapStateToProps, { logoutUser })(Profile);
 
 const Container = styled.div`
   background: white;
-  width: 95%;
   height: auto;
+  width: 95%;
   max-width: 400px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-  border-radius: 0px 0px 1rem 1rem;
+  margin-bottom: 2.5%;
   padding-bottom: 6.5rem;
-  margin-bottom: 1rem;
+  border-radius: 0px 0px 1rem 1rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+
   -ms-overflow-style: none;
   scrollbar-width: none;
+
   ::-webkit-scrollbar {
     display: none;
   }

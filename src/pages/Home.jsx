@@ -131,7 +131,7 @@ const Home = ({
       const randomId = filtered[index].questionId;
       setQuestion(category, randomId);
     } // eslint-disable-next-line
-  }, [questions, setQuestion, answers, saves]);
+  }, [questions, setQuestion]);
 
   const PopupContent = !submited ? (
     <>
