@@ -53,11 +53,11 @@ const Home = ({
   const [rotation, setRotation] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [submited, setSubmited] = useState(false);
-  let DummyAvatars = [];
+  const [dummyAvatars, setDummyAvatars] = useState([]);
 
   useEffect(() => {
     if (!clicked) return;
-    DummyAvatars = clicked && shuffle(MenAvatars);
+    setDummyAvatars(clicked && shuffle(MenAvatars));
   }, [clicked]);
 
   const isSaved = useCallback(() => {
@@ -163,7 +163,7 @@ const Home = ({
       <AnswerList>
         {question.answers.map(({ answer }, index) => (
           <li key={answer}>
-            <img src={DummyAvatars[index]} alt='avatar' />
+            <img src={dummyAvatars[index]} alt='avatar' />
             <p>{answer}</p>
           </li>
         ))}
