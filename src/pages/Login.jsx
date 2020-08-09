@@ -17,7 +17,7 @@ const Login = ({
   history,
   UI: { loading, errors },
 }) => {
-  const [email, setEmail] = useState('user@email.com');
+  const [email, setEmail] = useState('test@mail.com');
   const [password, setPassword] = useState('123456');
 
   const handleChange = useCallback(({ target: input }) => {
